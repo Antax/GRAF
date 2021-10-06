@@ -110,7 +110,7 @@ public class Graf{
      */
     public boolean existsNode(int id){
         Node n=new Node(id);
-        return existsNode(id);
+        return existsNode(n);
     }
 
     public void addNode(Node n){
