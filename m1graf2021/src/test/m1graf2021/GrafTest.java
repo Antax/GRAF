@@ -99,4 +99,45 @@ public class GrafTest {
         Assert.assertTrue(g.existsEdge(e1));
         Assert.assertFalse(g.existsEdge(e2));
     }
+
+    @Test
+    public void testGetSymetric(){
+        Edge e= new Edge(1,4);
+        Assert.assertTrue(e.getSymmetric().equals(new Edge(4,1)));
+    }
+
+    @Test
+    public void isSelfLoop(){
+        Edge e1= new Edge(1,4);
+        Edge e2= new Edge(3,3);
+        Assert.assertFalse(e1.isSelfLoop());
+        Assert.assertTrue(e2.isSelfLoop());
+    }
+
+    @Test
+    public void testNbEdges(){
+        int[] a={2, 4, 0, 0, 6, 0, 2, 3, 5, 8, 0, 0, 4, 7, 0, 3, 0, 7, 0};
+        Graf g=new Graf(a);
+        Assert.assertEquals(11,g.nbEdges());
+    }
+
+    @Test
+    public void testRemoveEdge(){
+        int[] a={2, 4, 0, 0, 6, 0, 2, 3, 5, 8, 0, 0, 4, 7, 0, 3, 0, 7, 0};
+        Graf g=new Graf(a);
+        Node n1=new Node(1);
+        Node n2=new Node(2);
+        Assert.assertTrue(g.existsEdge(n1,n2));
+        g.removeEdge(n1,n2);
+        Assert.assertFalse(g.existsEdge(n1,n2));
+
+        Assert.assertTrue(g.existsEdge(1,4));
+        g.removeEdge(1,4);
+        Assert.assertFalse(g.existsEdge(1,4));
+
+        Edge e=new Edge(3,6);
+        Assert.assertTrue(g.existsEdge(e));
+        g.removeEdge(e);
+        Assert.assertFalse(g.existsEdge(e));
+    }
 }

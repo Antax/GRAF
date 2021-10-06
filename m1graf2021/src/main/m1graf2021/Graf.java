@@ -66,6 +66,9 @@ public class Graf{
      * @return true if found, false otherwise
      */
     public boolean existsNode(Node n){
+        if(n==null){
+            return false;
+        }
         for (Map.Entry<Node, List<Edge>> node : adjEdList.entrySet()) {
             if(node.getKey().equals(n)){
                 return true;
@@ -81,20 +84,25 @@ public class Graf{
      * @return true if found, false otherwise
      */
     public boolean existsNode(int id){
-        for (Map.Entry<Node, List<Edge>> node : adjEdList.entrySet()) {
-            if(node.getKey().getId()==id){
-                return true;
-            }
-        }
-        return false;
+        Node n=new Node(id);
+        return existsNode(id);
     }
 
     public void addNode(Node n){
+        if(existsNode(n)){
+            System.out.println("Le noeud "+n+" existe déjà dans le graf");
+            return;
+        }
+        if(n==null){
+            System.out.println("Le noeud est null");
+            return;
+        }
         adjEdList.put(n, new ArrayList<Edge>());
     }
 
     public void addNode(int id){
-        adjEdList.put(new Node(id), new ArrayList<Edge>());
+        Node n=new Node(id);
+        addNode(n);
     }
 
     /*public void removeNode(){
@@ -147,5 +155,34 @@ public class Graf{
             ret+="\n";
         }
         return ret;
+    }
+
+    public int nbEdges(){
+        int ret=0;
+        for (Map.Entry<Node, List<Edge>> node : adjEdList.entrySet()) {
+            if(node.getValue()!=null){
+                ret+=node.getValue().size();
+            }
+        }
+        return ret;
+    }
+
+    public void removeEdge(Node from,Node to){
+        if(from==null||to==null){
+            return;
+        }
+        if(existsEdge(from,to)){
+            adjEdList.get(from).remove(new Edge(from,to));
+        }
+    }
+
+    public void removeEdge(int from,int to){
+        Node f=new Node(from);
+        Node t=new Node(to);
+        removeEdge(f,t);
+    }
+
+    public void removeEdge(Edge e){
+        removeEdge(e.from(),e.to());
     }
 }

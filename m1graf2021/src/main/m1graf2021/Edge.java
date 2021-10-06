@@ -64,4 +64,14 @@ public class Edge implements Comparable<Edge>{
         }
         return ret;
     }
+
+    public Edge getSymmetric(){
+        return new Edge(to(),from());
+    }
+
+    public boolean isSelfLoop(){
+        return to().equals(from());
+    }
+
+
 }
