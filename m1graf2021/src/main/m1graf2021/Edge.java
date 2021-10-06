@@ -1,9 +1,9 @@
 package main.m1graf2021;
 
 public class Edge implements Comparable<Edge>{
-    Node source;
-    Node target;
-    Integer weight;
+    private Node source;
+    private Node target;
+    private Integer weight;
 
     public Edge(Node s, Node t) {
         source=s;
@@ -29,6 +29,14 @@ public class Edge implements Comparable<Edge>{
         weight=w;
     }
 
+    public Node from(){
+        return source;
+    }
+
+    public Node to(){
+        return target;
+    }
+
     @Override
     public int compareTo(Edge o) {
         if(source.compareTo(o.source)==1){
@@ -38,6 +46,14 @@ public class Edge implements Comparable<Edge>{
             return target.compareTo(o.target);
         }
         return -1;
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Edge edge = (Edge) o;
+        return (edge.source.equals(source) && edge.target.equals(target));
     }
 
     @Override

@@ -50,6 +50,53 @@ public class GrafTest {
     public void testGrafCreate(){
         int[] a={2, 4, 0, 0, 6, 0, 2, 3, 5, 8, 0, 0, 4, 7, 0, 3, 0, 7, 0};
         Graf g=new Graf(a);
-        Assert.assertEquals("",g.toString());
+        Assert.assertEquals(true,g.existsEdge(1,2));
+        Assert.assertEquals(true,g.existsEdge(1,4));
+        Assert.assertEquals(true,g.existsEdge(4,5));
+        Assert.assertEquals(false,g.existsEdge(2,1));
+    }
+
+    @Test
+    public void testNbNodes(){
+        int[] a={2, 4, 0, 0, 6, 0, 2, 3, 5, 8, 0, 0, 4, 7, 0, 3, 0, 7, 0};
+        Graf g=new Graf(a);
+        Assert.assertEquals(8,g.nbNodes());
+    }
+
+    @Test
+    public void testExistsNode(){
+        int[] a={2, 4, 0, 0, 6, 0, 2, 3, 5, 8, 0, 0, 4, 7, 0, 3, 0, 7, 0};
+        Graf g=new Graf(a);
+        Assert.assertTrue(g.existsNode(5));
+        Assert.assertTrue(g.existsNode(new Node(5)));
+        Assert.assertFalse(g.existsNode(9));
+        Assert.assertFalse(g.existsNode(new Node(9)));
+    }
+
+    @Test
+    public void testAddNode(){
+        Graf g=new Graf();
+        g.addNode(5);
+        Node n=new Node(4);
+        g.addNode(n);
+        Assert.assertTrue(g.existsNode(4));
+        Assert.assertTrue(g.existsNode(5));
+    }
+
+    @Test
+    public void testExistsEdge(){
+        int[] a={2, 4, 0, 0, 6, 0, 2, 3, 5, 8, 0, 0, 4, 7, 0, 3, 0, 7, 0};
+        Graf g=new Graf(a);
+        Assert.assertTrue(g.existsEdge(1,2));
+        Assert.assertFalse(g.existsEdge(1,5));
+        Node n1=new Node(1);
+        Node n2=new Node(2);
+        Node n5=new Node(5);
+        Assert.assertTrue(g.existsEdge(n1,n2));
+        Assert.assertFalse(g.existsEdge(n1,n5));
+        Edge e1=new Edge(1,2);
+        Edge e2=new Edge(1,5);
+        Assert.assertTrue(g.existsEdge(e1));
+        Assert.assertFalse(g.existsEdge(e2));
     }
 }
