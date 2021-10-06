@@ -44,6 +44,31 @@ public class Graf{
         return adjEdList.size();
     }
 
+    void addEdge(Node from, Node to){
+        if(from==null || to==null){
+            return;
+        }
+        if(!existsNode(from)){
+            addNode(from);
+        }
+        if(!existsNode(to)){
+            addNode(to);
+        }
+        if(!existsNode(from) || !existsNode(to)){
+            return;
+        }
+        adjEdList.get(from).add(new Edge(from,to));
+    }
+
+    void addEdge(int from, int to){
+        addEdge(new Node(from), new Node(to));
+    }
+
+    void addEdge(Edge edge){
+        addEdge(edge.from(),edge.to());
+    }
+
+
     /**
      * Gets the instance of a node in the graf
      *
