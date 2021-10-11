@@ -1,9 +1,6 @@
 package main.m1graf2021;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Graf{
     Map<Node, List<Edge>> adjEdList;
@@ -130,9 +127,17 @@ public class Graf{
         addNode(n);
     }
 
-    /*public void removeNode(){
+    public void removeNode(Node n){
+        adjEdList.remove(n);
+        List<Edge> toRemove=getInEdges(n);
+        for(int i=0;i<toRemove.size();++i){
+            removeEdge(toRemove.get(i));
+        }
+    }
 
-    }*/
+    public void removeNode(int id){
+        removeNode(new Node(id));
+    }
 
     /**
      * Searches for an edge in the graf
@@ -209,5 +214,47 @@ public class Graf{
 
     public void removeEdge(Edge e){
         removeEdge(e.from(),e.to());
+    }
+
+    public List<Edge> getOutEdges(Node n){
+        return adjEdList.get(n);
+    }
+
+    public List<Edge> getOutEdges(int id){
+        return getOutEdges(new Node(id));
+    }
+
+    public List<Edge> getAllEdges(){
+        List<Edge> res=new ArrayList<Edge>();
+        for (List<Edge> value : adjEdList.values()) {
+            res.addAll(value);
+        }
+        return res;
+    }
+
+    public List<Edge> getInEdges(Node n){
+        List<Edge> res=new ArrayList<Edge>();
+        for (List<Edge> value : adjEdList.values()) {
+            for(int i=0;i<value.size();++i){
+                if(value.get(i).to().equals(n)){
+                    res.add(value.get(i));
+                }
+            }
+        }
+        return res;
+    }
+
+    public List<Edge> getInEdges(int id){
+        return getInEdges(new Node(id));
+    }
+
+    public List<Edge> getIncidentEdges(Node n){
+        List<Edge> res=getInEdges(n);
+        res.addAll(getOutEdges(n));
+        return new ArrayList<>(new HashSet<>(res));
+    }
+
+    public List<Edge> getIncidentEdges(int id){
+        return getIncidentEdges(new Node(id));
     }
 }

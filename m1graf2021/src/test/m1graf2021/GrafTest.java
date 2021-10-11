@@ -5,6 +5,10 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class GrafTest {
     @Test
     public void testNodeCreate() {
@@ -139,5 +143,83 @@ public class GrafTest {
         Assert.assertTrue(g.existsEdge(e));
         g.removeEdge(e);
         Assert.assertFalse(g.existsEdge(e));
+    }
+
+    @Test
+    public void testGetOutEdges(){
+        int[] a={2, 4, 0, 0, 6, 0, 2, 3, 5, 8, 0, 0, 4, 7, 0, 3, 0, 7, 0};
+        Graf g=new Graf(a);
+        List<Edge>l=g.getOutEdges(new Node(1));
+        List<Edge> expected=new ArrayList<Edge>();
+        expected.add(new Edge(1,2));
+        expected.add(new Edge(1,4));
+        Assert.assertEquals(expected,l);
+    }
+
+    @Test
+    public void testGetInEdges(){
+        int[] a={2, 4, 0, 0, 6, 0, 2, 3, 5, 8, 0, 0, 4, 7, 0, 3, 0, 7, 0};
+        Graf g=new Graf(a);
+        List<Edge>l=g.getInEdges(new Node(4));
+        List<Edge> expected=new ArrayList<Edge>();
+        expected.add(new Edge(6,4));
+        expected.add(new Edge(1,4));
+        Collections.sort(l);
+        Collections.sort(expected);
+        Assert.assertEquals(expected,l);
+    }
+
+    @Test
+    public void testGetAllEdges(){
+        int[] a={2, 4, 0, 0, 6, 0, 2, 3, 5, 8, 0, 0, 4, 7, 0, 3, 0, 7, 0};
+        Graf g=new Graf(a);
+        List<Edge>l=g.getAllEdges();
+        List<Edge> expected=new ArrayList<Edge>();
+        expected.add(new Edge(1,2));
+        expected.add(new Edge(1,4));
+        expected.add(new Edge(3,6));
+        expected.add(new Edge(4,2));
+        expected.add(new Edge(4,3));
+        expected.add(new Edge(4,5));
+        expected.add(new Edge(4,8));
+        expected.add(new Edge(6,4));
+        expected.add(new Edge(6,7));
+        expected.add(new Edge(7,3));
+        expected.add(new Edge(8,7));
+        Collections.sort(l);
+        Collections.sort(expected);
+        Assert.assertEquals(expected,l);
+    }
+
+    @Test
+    public void testRemoveNode(){
+        int[] a={2, 4, 0, 0, 6, 0, 2, 3, 5, 8, 0, 0, 4, 7, 0, 3, 0, 7, 0};
+        Graf g=new Graf(a);
+        g.removeNode(4);
+        Assert.assertFalse(g.existsNode(4));
+        Assert.assertFalse(g.existsEdge(1,4));
+        Assert.assertFalse(g.existsEdge(6,4));
+        Assert.assertFalse(g.existsEdge(4,2));
+        Assert.assertFalse(g.existsEdge(4,3));
+        Assert.assertFalse(g.existsEdge(4,5));
+        Assert.assertFalse(g.existsEdge(4,8));
+    }
+
+    @Test
+    public void testGetIncidentEdges(){
+        int[] a={2, 4, 0, 0, 6, 0, 4, 2, 3, 5, 8, 0, 0, 4, 7, 0, 3, 0, 7, 0};
+        Graf g=new Graf(a);
+        List<Edge>l=g.getIncidentEdges(4);
+        List<Edge>expected=new ArrayList<>();
+        expected.add(new Edge(1,4));
+        expected.add(new Edge(6,4));
+        expected.add(new Edge(4,4));
+        expected.add(new Edge(4,2));
+        expected.add(new Edge(4,3));
+        expected.add(new Edge(4,5));
+        expected.add(new Edge(4,8));
+        Collections.sort(l);
+        Collections.sort(expected);
+        Assert.assertEquals(expected,l);
     }
 }
