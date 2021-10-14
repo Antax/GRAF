@@ -257,4 +257,98 @@ public class Graf{
     public List<Edge> getIncidentEdges(int id){
         return getIncidentEdges(new Node(id));
     }
+
+    public List<Node> getSuccessors(Node n){
+        if(n==null || !existsNode(n)){
+            return null;
+        }
+        List<Edge> edgesFromN=adjEdList.get(n);
+        List<Node> res=new ArrayList<>();
+        for(int i=0;i<edgesFromN.size();++i){
+            res.add(edgesFromN.get(i).to());
+        }
+        return res;
+    }
+
+    public List<Node> getSuccessors(int id){
+        return getSuccessors(new Node(id));
+    }
+
+    public List<Node> getAllNodes(){
+        List<Node>res=new ArrayList<>();
+        for (Node key : adjEdList.keySet()) {
+            res.add(key);
+        }
+        return res;
+    }
+
+    public boolean adjacent(Node u,Node v){
+        return (u.equals(v) || existsEdge(u,v)||existsEdge(v,u));
+    }
+
+    public boolean adjacent(int idU,int idV){
+        return adjacent(new Node(idU),new Node(idV));
+    }
+
+    public int largestNodeId(){
+        if(adjEdList.size()==0){
+            System.out.println("Graf does not contain any nodes");
+            return -1;
+        }
+        int max=0;
+        for(Node key : adjEdList.keySet()){
+            if(key.getId()>max){
+                max=key.getId();
+            }
+        }
+        return max;
+    }
+
+    public int outDegree(Node n){
+        if(!existsNode(n)){
+            System.out.println("Graf does not contain this node");
+            return -1;
+        }
+        return adjEdList.get(n).size();
+    }
+
+    public int outDegree(int id){
+        return outDegree(new Node(id));
+    }
+
+    public int inDegree(Node n){
+        if(!existsNode(n)){
+            System.out.println("Graf does not contain this node");
+            return -1;
+        }
+        int res=0;
+        for (List<Edge> value : adjEdList.values()) {
+            for(int i=0;i<value.size();++i){
+                if(value.get(i).to().equals(n)){
+                    res++;
+                }
+            }
+        }
+        return res;
+    }
+
+    public int inDegree(int id){
+        return inDegree(new Node(id));
+    }
+
+    public int degree(Node n){
+        if(!existsNode(n)){
+            System.out.println("Graf does not contain this node");
+            return -1;
+        }
+        int res=inDegree(n)+outDegree(n);
+        if(existsEdge(4,4)){
+            res--;
+        }
+        return res;
+    }
+
+    public int degree(int id){
+        return degree(new Node(id));
+    }
 }

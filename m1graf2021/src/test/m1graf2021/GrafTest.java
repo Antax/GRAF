@@ -222,4 +222,91 @@ public class GrafTest {
         Collections.sort(expected);
         Assert.assertEquals(expected,l);
     }
+
+    @Test
+    public void testSuccessors(){
+        int[] a={2, 4, 0, 0, 6, 0, 4, 2, 3, 5, 8, 0, 0, 4, 7, 0, 3, 0, 7, 0};
+        Graf g=new Graf(a);
+        List<Node>expected=new ArrayList<>();
+        expected.add(new Node(4));
+        expected.add(new Node(2));
+        expected.add(new Node(3));
+        expected.add(new Node(5));
+        expected.add(new Node(8));
+        Collections.sort(expected);
+
+        List<Node>successorsFrom4=g.getSuccessors(4);
+        Collections.sort(successorsFrom4);
+        Assert.assertEquals(expected,successorsFrom4);
+    }
+
+    @Test
+    public void testGetAllNodes(){
+        Graf g=new Graf();
+        g.addNode(1);
+        g.addNode(4);
+        g.addNode(7);
+        g.addNode(32);
+
+        List<Node>expected=new ArrayList<>();
+        expected.add(new Node(1));
+        expected.add(new Node(4));
+        expected.add(new Node(7));
+        expected.add(new Node(32));
+        Collections.sort(expected);
+
+        List<Node>allNodes=g.getAllNodes();
+        Collections.sort(allNodes);
+
+        Assert.assertEquals(expected,allNodes);
+    }
+
+    @Test
+    public void testAdjacent(){
+        int[] a={2, 4, 0, 0, 6, 0, 4, 2, 3, 5, 8, 0, 0, 4, 7, 0, 3, 0, 7, 0};
+        Graf g=new Graf(a);
+        Assert.assertTrue(g.adjacent(4,8));
+        Assert.assertTrue(g.adjacent(8,4));
+        Assert.assertTrue(g.adjacent(1,1));
+        Assert.assertFalse(g.adjacent(3,5));
+    }
+
+    @Test
+    public void testLargestNodeId(){
+        Graf g=new Graf();
+
+        Assert.assertEquals(g.largestNodeId(),-1);
+
+        g.addNode(1);
+        g.addNode(32);
+        g.addNode(4);
+        g.addNode(7);
+
+
+        Assert.assertEquals(g.largestNodeId(),32);
+    }
+
+    @Test
+    public void testOutDegree(){
+        int[] a={2, 4, 0, 0, 6, 0, 4, 2, 3, 5, 8, 0, 0, 4, 7, 0, 3, 0, 7, 0};
+        Graf g=new Graf(a);
+        Assert.assertEquals(-1,g.outDegree(19));
+        Assert.assertEquals(5,g.outDegree(4));
+    }
+
+    @Test
+    public void testInDegree(){
+        int[] a={2, 4, 0, 0, 6, 0, 4, 2, 3, 5, 8, 0, 0, 4, 7, 0, 3, 0, 7, 0};
+        Graf g=new Graf(a);
+        Assert.assertEquals(-1,g.inDegree(19));
+        Assert.assertEquals(3,g.inDegree(4));
+    }
+
+    @Test
+    public void testDegree(){
+        int[] a={2, 4, 0, 0, 6, 0, 4, 2, 3, 5, 8, 0, 0, 4, 7, 0, 3, 0, 7, 0};
+        Graf g=new Graf(a);
+        Assert.assertEquals(-1,g.degree(19));
+        Assert.assertEquals(7,g.degree(4));
+    }
 }
