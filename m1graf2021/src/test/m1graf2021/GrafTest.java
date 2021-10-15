@@ -5,6 +5,7 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -308,5 +309,32 @@ public class GrafTest {
         Graf g=new Graf(a);
         Assert.assertEquals(-1,g.degree(19));
         Assert.assertEquals(7,g.degree(4));
+    }
+
+    @Test
+    public void testToDotString(){
+        int[] a={2, 4, 0, 0, 6, 0, 2, 3, 5, 8, 0, 0, 4, 7, 0, 3, 0, 7, 0};
+        Graf g=new Graf(a);
+        String expected="digraph G {\n" +
+                "1 -> 2;\n" +
+                "1 -> 4;\n" +
+                "3 -> 6;\n" +
+                "4 -> 2;\n" +
+                "4 -> 3;\n" +
+                "4 -> 5;\n" +
+                "4 -> 8;\n" +
+                "6 -> 4;\n" +
+                "6 -> 7;\n" +
+                "7 -> 3;\n" +
+                "8 -> 7;\n" +
+                "}";
+        Assert.assertEquals(expected,g.toDotString());
+    }
+
+    @Test
+    public void testToDotFile() throws FileNotFoundException {
+        int[] a={3, 4, 0, 0, 6, 0, 2, 3, 5, 8, 0, 0, 4, 7, 0, 3, 0, 7, 0};
+        Graf g=new Graf(a);
+        g.toDotFile("\\D:\\M1\\GRAF\\test.dot");
     }
 }

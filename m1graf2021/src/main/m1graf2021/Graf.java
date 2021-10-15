@@ -1,5 +1,8 @@
 package main.m1graf2021;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.*;
 
 public class Graf{
@@ -350,5 +353,28 @@ public class Graf{
 
     public int degree(int id){
         return degree(new Node(id));
+    }
+
+    public String toDotString(){
+        String res="digraph G {\n";
+        List<Edge> edges=getAllEdges();
+        Collections.sort(edges);
+        for (Edge e:edges) {
+            res+=e.from().toString()+" -> "+e.to().toString()+";\n";
+        }
+        res+='}';
+        return res;
+    }
+
+    /**
+     * Writes the representation of the graph in the dot format, in a given file path
+     * If the file already exists, ask for confirmation to replace it's content
+     *
+     * @param fileName path to the file to write in
+     */
+    public void toDotFile(String fileName) throws FileNotFoundException{
+        PrintWriter writer = new PrintWriter(fileName);
+        writer.print(toDotString());
+        writer.close();
     }
 }
