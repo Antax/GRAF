@@ -1,8 +1,6 @@
 package main.m1graf2021;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.*;
 
 public class Graf{
@@ -40,6 +38,56 @@ public class Graf{
         }
     }
 
+    /**
+     *
+     * @param pathToDotFile the absolute path to a dot file (simplified version, according to the subject)
+     */
+    public Graf(String pathToDotFile){
+        adjEdList=new HashMap<>();
+        String pathWithoutExtension = pathToDotFile.substring(pathToDotFile.length() - 4);
+        if(!pathWithoutExtension.equals(".dot")){
+            System.out.println(pathWithoutExtension +" The file must be a dot file");
+            return;
+        }
+        BufferedReader reader;
+        try {
+            reader = new BufferedReader(new FileReader(pathToDotFile));
+            String line=reader.readLine();
+            while (line != null) {
+                line = reader.readLine();
+                if(line!=null){
+                    line=line.trim();
+                    if(!line.contains("{")&&!line.contains("}")) {
+                        //A node (with a label)
+                        if (!line.contains("->")) {
+                            int id=Integer.parseInt(line.substring(0,line.indexOf('[')));
+                            String label=line.substring(line.indexOf("\"")+1,line.lastIndexOf("\"")-1).trim();
+                            addNode(new Node(id,label));
+                        }
+                        //An edge
+                        if (line.contains("->")) {
+
+                            if(!line.contains("len")){
+                                int from=Integer.parseInt(line.substring(0,line.indexOf("-")-1).trim());
+                                int to=Integer.parseInt(line.substring(line.indexOf(">")+1,line.indexOf(";")).trim());
+                                addEdge(from,to);
+                            }else{
+                                int from=Integer.parseInt(line.substring(0,line.indexOf("-")-1).trim());
+                                int to=Integer.parseInt(line.substring(line.indexOf(">")+1,line.indexOf("[")).trim());
+                                int weight=Integer.parseInt(line.substring(line.indexOf("\"")+1,line.lastIndexOf(",")-1).trim());
+                                addEdge(from,to);
+                                setEdgeWeight(from,to,weight);
+                            }
+                        }
+                    }
+                }
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public int nbNodes(){
         return adjEdList.size();
     }
@@ -68,7 +116,6 @@ public class Graf{
         addEdge(edge.from(),edge.to());
     }
 
-
     /**
      * Gets the instance of a node in the graf
      *
@@ -94,12 +141,7 @@ public class Graf{
         if(n==null){
             return false;
         }
-        for (Map.Entry<Node, List<Edge>> node : adjEdList.entrySet()) {
-            if(node.getKey().equals(n)){
-                return true;
-            }
-        }
-        return false;
+        return adjEdList.containsKey(n);
     }
 
     /**
@@ -140,6 +182,19 @@ public class Graf{
 
     public void removeNode(int id){
         removeNode(new Node(id));
+    }
+
+    public Edge getEdge(Edge e){
+        if(!existsNode(e.from())||!existsNode(e.to())){
+            return null;
+        }
+        Edge researched=new Edge(e.from(),e.to());
+        for(int i=0;i<adjEdList.get(e.from()).size();++i){
+            if(adjEdList.get(e.from()).get(i).equals(researched)){
+                return adjEdList.get(e.from()).get(i);
+            }
+        }
+        return null;
     }
 
     /**
@@ -360,7 +415,11 @@ public class Graf{
         List<Edge> edges=getAllEdges();
         Collections.sort(edges);
         for (Edge e:edges) {
-            res+=e.from().toString()+" -> "+e.to().toString()+";\n";
+            res+=e.from().toString()+" -> "+e.to().toString();
+            if(e.hasWeight()){
+                res+="[len="+e.weight()+",label="+e.weight()+"]";
+            }
+            res+=";\n";
         }
         res+='}';
         return res;
@@ -376,5 +435,71 @@ public class Graf{
         PrintWriter writer = new PrintWriter(fileName);
         writer.print(toDotString());
         writer.close();
+    }
+
+    public void setEdgeWeight(Edge e,int w){
+        Edge localEdge=getEdge(e);
+        if(localEdge!=null){
+            localEdge.setWeight(w);
+        }
+    }
+
+    public void setEdgeWeight(Node f, Node t, int w){
+        setEdgeWeight(new Edge(f,t),w);
+    }
+
+    public void setEdgeWeight(int f,int t, int w){
+        setEdgeWeight(new Edge(new Node(f),new Node(t)),w);
+    }
+
+    public int[][] toAdjMatrix(){
+        int nbNodes=nbNodes();
+        int[][] res=new int[nbNodes][nbNodes];
+        for(int i=0;i<nbNodes;++i){
+            for(int j=0;j<nbNodes;++j){
+                res[i][j]=0;
+            }
+        }
+        List<Edge>edges=getAllEdges();
+        for(int i=0;i<edges.size();++i){
+            Edge e=edges.get(i);
+            res[e.from().getId()-1][e.to().getId()-1]++;
+        }
+        return res;
+    }
+
+    public int[] toSuccessorArray(){
+        //need arrayList because we don't know the size of the result yet
+        ArrayList<Integer> arrayList = new ArrayList<Integer>();
+        List<Node>nodes=getAllNodes();
+        Collections.sort(nodes);
+        for(int i=0;i<nodes.size();++i){
+            List<Edge>edgesFromCurrentNode=getOutEdges(nodes.get(i));
+            for(int j=0;j<edgesFromCurrentNode.size();++j){
+                arrayList.add(edgesFromCurrentNode.get(j).to().getId());
+            }
+            arrayList.add(0);
+        }
+        int[] arr = new int[arrayList.size()];
+        for(int i=0;i<arrayList.size();++i){
+            arr[i]=arrayList.get(i);
+        }
+        return arr;
+    }
+
+    public Graf getReverse(){
+        List<Node> nodes=getAllNodes();
+        List<Edge> edges=getAllEdges();
+
+        Graf g=new Graf();
+        for(int i=0;i<nodes.size();++i){
+            g.addNode(nodes.get(i));
+        }
+
+        for(int j=0;j<edges.size();++j){
+            g.addEdge(edges.get(j).to(),edges.get(j).to());
+        }
+
+        return g;
     }
 }

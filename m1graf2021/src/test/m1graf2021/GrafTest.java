@@ -79,6 +79,13 @@ public class GrafTest {
     }
 
     @Test
+    public void testExistsNodeEmptyGraf(){
+        Graf g=new Graf();
+        Assert.assertFalse(g.existsNode(5));
+        Assert.assertFalse(g.existsNode(new Node(5)));
+    }
+
+    @Test
     public void testAddNode(){
         Graf g=new Graf();
         g.addNode(5);
@@ -315,9 +322,10 @@ public class GrafTest {
     public void testToDotString(){
         int[] a={2, 4, 0, 0, 6, 0, 2, 3, 5, 8, 0, 0, 4, 7, 0, 3, 0, 7, 0};
         Graf g=new Graf(a);
+        g.setEdgeWeight(1,4,5);
         String expected="digraph G {\n" +
                 "1 -> 2;\n" +
-                "1 -> 4;\n" +
+                "1 -> 4[len=5,label=5];\n" +
                 "3 -> 6;\n" +
                 "4 -> 2;\n" +
                 "4 -> 3;\n" +
@@ -337,4 +345,71 @@ public class GrafTest {
         Graf g=new Graf(a);
         g.toDotFile("\\D:\\M1\\GRAF\\test.dot");
     }
+
+    @Test
+    public void testDotToGraph(){
+        Graf graphFromDot=new Graf("\\D:\\M1\\GRAF\\test.dot");
+        List<Edge> edgesFromDot=graphFromDot.getAllEdges();
+        Collections.sort(edgesFromDot);
+        List<Node> nodesFromDot=graphFromDot.getAllNodes();
+        Collections.sort(nodesFromDot);
+
+
+        int[] a={3, 4, 0, 0, 6, 0, 2, 3, 5, 8, 0, 0, 4, 7, 0, 3, 0, 7, 0};
+        Graf expected=new Graf(a);
+        List<Edge> edgesExpected=expected.getAllEdges();
+        Collections.sort(edgesExpected);
+        List<Node> nodesExpected=expected.getAllNodes();
+        Collections.sort(nodesExpected);
+
+        Assert.assertEquals(edgesExpected,edgesFromDot);
+        Assert.assertEquals(nodesExpected,nodesFromDot);
+        Assert.assertEquals(32,graphFromDot.getEdge(new Edge(3,6)).weight());
+    }
+
+    @Test
+    public void testToAdjMatrix(){
+        int[] a={3, 4, 4, 0, 0, 6, 0, 2, 3, 5, 8, 0, 0, 4, 7, 0, 3, 0, 7, 0};
+        Graf g=new Graf(a);
+
+        int[][]expected=new int[g.nbNodes()][g.nbNodes()];
+        expected[0]=new int[]{0,0,1,2,0,0,0,0};
+        expected[1]=new int[]{0,0,0,0,0,0,0,0};
+        expected[2]=new int[]{0,0,0,0,0,1,0,0};
+        expected[3]=new int[]{0,1,1,0,1,0,0,1};
+        expected[4]=new int[]{0,0,0,0,0,0,0,0};
+        expected[5]=new int[]{0,0,0,1,0,0,1,0};
+        expected[6]=new int[]{0,0,1,0,0,0,0,0};
+        expected[7]=new int[]{0,0,0,0,0,0,1,0};
+
+        Assert.assertArrayEquals(expected,g.toAdjMatrix());
+    }
+
+    @Test
+    public void testToSuccessorArray(){
+        int[] a={3, 4, 4, 0, 0, 6, 0, 2, 3, 5, 8, 0, 0, 4, 7, 0, 3, 0, 7, 0};
+        Graf g=new Graf(a);
+        Assert.assertArrayEquals(a,g.toSuccessorArray());
+    }
+
+    /*@Test
+    public void testReverseGraf(){
+        int[] a={3, 4, 4, 0, 0, 6, 0, 2, 3, 5, 8, 0, 0, 4, 7, 0, 3, 0, 7, 0};
+        Graf g=new Graf(a);
+        Graf gReverse=g.getReverse();
+        List<Node>nodesReverse=gReverse.getAllNodes();
+        Collections.sort(nodesReverse);
+        List<Edge>edgesReverse=gReverse.getAllEdges();
+        Collections.sort(edgesReverse);
+
+        int[] expectedA={0,0,4,0,1,4,7,0,1,1,6,0,4,0,3,0,6,8,0,4,0};
+        Graf gExpected=new Graf(expectedA);
+        List<Node>nodesExpected=gExpected.getAllNodes();
+        Collections.sort(nodesExpected);
+        List<Edge>edgesExpected=gExpected.getAllEdges();
+        Collections.sort(edgesExpected);
+
+        Assert.assertEquals(nodesExpected,nodesReverse);
+        Assert.assertEquals(edgesExpected,edgesReverse);
+    }*/
 }
