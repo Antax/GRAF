@@ -1,5 +1,7 @@
 package main.m1graf2021;
 
+import javafx.util.Pair;
+
 import java.io.*;
 import java.util.*;
 
@@ -108,11 +110,11 @@ public class Graf{
         adjEdList.get(from).add(new Edge(from,to));
     }
 
-    void addEdge(int from, int to){
+    public void addEdge(int from, int to){
         addEdge(new Node(from), new Node(to));
     }
 
-    void addEdge(Edge edge){
+    public void addEdge(Edge edge){
         addEdge(edge.from(),edge.to());
     }
 
@@ -497,9 +499,73 @@ public class Graf{
         }
 
         for(int j=0;j<edges.size();++j){
-            g.addEdge(edges.get(j).to(),edges.get(j).to());
+            g.addEdge(edges.get(j).to(),edges.get(j).from());
         }
 
         return g;
+    }
+
+    public List<Node> getBFS(){
+        List<Node> allNodes=getAllNodes();
+
+        Map<Node, Boolean> visitedNodes=new HashMap<>();
+
+        for (Node n :allNodes) {
+            visitedNodes.put(n,false);
+        }
+        Node firstNode=allNodes.get(0);
+
+        LinkedList<Node> queue=new LinkedList<>();
+        queue.add(firstNode);
+
+        LinkedList<Node> result=new LinkedList<>();
+        result.add(firstNode);
+
+        visitedNodes.replace(firstNode,true);
+
+        while(!queue.isEmpty()){
+            Node current=queue.removeFirst();
+            for (Node n:getSuccessors(current)) {
+                if(!visitedNodes.get(n)){
+                    visitedNodes.replace(n,true);
+                    queue.add(n);
+                    result.add(n);
+                }
+            }
+        }
+        return result;
+    }
+
+    public List<Node> getDFS(){
+        List<Node> allNodes=getAllNodes();
+
+        Map<Node, Boolean> visitedNodes=new HashMap<>();
+
+        for (Node n :allNodes) {
+            visitedNodes.put(n,false);
+        }
+        LinkedList<Node> result=new LinkedList<>();
+
+        for (Node n: allNodes) {
+            if(!visitedNodes.get(n)){
+                Pair<LinkedList<Node>,Map<Node,Boolean>> dfsVisitRes = dfsVisit(n,result,visitedNodes);
+                result=dfsVisitRes.getKey();
+                visitedNodes=dfsVisitRes.getValue();
+            }
+        }
+        return result;
+    }
+
+    public Pair<LinkedList<Node>,Map<Node,Boolean>> dfsVisit(Node n, LinkedList<Node> result, Map<Node,Boolean> visitedNodes){
+        visitedNodes.replace(n,true);
+        result.add(n);
+        for (Node adj:getSuccessors(n)) {
+            if(!visitedNodes.get(adj)){
+                Pair<LinkedList<Node>,Map<Node,Boolean>> dfsVisitRes=dfsVisit(adj,result,visitedNodes);
+                result=dfsVisitRes.getKey();
+                visitedNodes=dfsVisitRes.getValue();
+            }
+        }
+        return new Pair<>(result, visitedNodes);
     }
 }

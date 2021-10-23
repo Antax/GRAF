@@ -392,18 +392,28 @@ public class GrafTest {
         Assert.assertArrayEquals(a,g.toSuccessorArray());
     }
 
-    /*@Test
+    @Test
     public void testReverseGraf(){
-        int[] a={3, 4, 4, 0, 0, 6, 0, 2, 3, 5, 8, 0, 0, 4, 7, 0, 3, 0, 7, 0};
-        Graf g=new Graf(a);
+        Graf g=new Graf();
+        g.addEdge(1,1);
+        g.addEdge(1,2);
+        g.addEdge(1,4);
+        g.addEdge(2,3);
+        g.addEdge(3,4);
+        g.addEdge(4,4);
         Graf gReverse=g.getReverse();
         List<Node>nodesReverse=gReverse.getAllNodes();
         Collections.sort(nodesReverse);
         List<Edge>edgesReverse=gReverse.getAllEdges();
         Collections.sort(edgesReverse);
 
-        int[] expectedA={0,0,4,0,1,4,7,0,1,1,6,0,4,0,3,0,6,8,0,4,0};
-        Graf gExpected=new Graf(expectedA);
+        Graf gExpected=new Graf();
+        gExpected.addEdge(1,1);
+        gExpected.addEdge(2,1);
+        gExpected.addEdge(4,1);
+        gExpected.addEdge(3,2);
+        gExpected.addEdge(4,3);
+        gExpected.addEdge(4,4);
         List<Node>nodesExpected=gExpected.getAllNodes();
         Collections.sort(nodesExpected);
         List<Edge>edgesExpected=gExpected.getAllEdges();
@@ -411,5 +421,21 @@ public class GrafTest {
 
         Assert.assertEquals(nodesExpected,nodesReverse);
         Assert.assertEquals(edgesExpected,edgesReverse);
-    }*/
+    }
+
+    @Test
+    public void testBFS(){
+        int[] a={2, 4, 0, 0, 6, 0, 2, 3, 5, 8, 0, 0, 4, 7, 0, 3, 0, 7, 0};
+        Graf g=new Graf(a);
+        System.out.println(g.toDotString());
+        System.out.println(g.getBFS().toString());
+    }
+
+    @Test
+    public void testDFS(){
+        int[] a={2, 4, 0, 0, 6, 0, 2, 3, 5, 8, 0, 0, 4, 7, 0, 3, 0, 7, 0};
+        Graf g=new Graf(a);
+        System.out.println(g.toDotString());
+        System.out.println(g.getDFS().toString());
+    }
 }
