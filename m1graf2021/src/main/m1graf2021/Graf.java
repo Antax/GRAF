@@ -12,7 +12,13 @@ public class Graf{
         adjEdList = new HashMap<>();
     }
 
-    public Graf(int[] data){
+    public Graf(int... ids){
+        int[] data=new int[ids.length];
+        int j=0;
+        for(int id : ids) {
+            data[j]=id;
+            ++j;
+        }
         adjEdList = new HashMap<>();
         int numberOfNode=1;
         int i=0;

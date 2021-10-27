@@ -52,9 +52,18 @@ public class GrafTest {
     }
 
     @Test
-    public void testGrafCreate(){
+    public void testGrafCreateArray(){
         int[] a={2, 4, 0, 0, 6, 0, 2, 3, 5, 8, 0, 0, 4, 7, 0, 3, 0, 7, 0};
         Graf g=new Graf(a);
+        Assert.assertEquals(true,g.existsEdge(1,2));
+        Assert.assertEquals(true,g.existsEdge(1,4));
+        Assert.assertEquals(true,g.existsEdge(4,5));
+        Assert.assertEquals(false,g.existsEdge(2,1));
+    }
+
+    @Test
+    public void testGrafCreateVarArgs(){
+        Graf g=new Graf(2, 4, 0, 0, 6, 0, 2, 3, 5, 8, 0, 0, 4, 7, 0, 3, 0, 7, 0);
         Assert.assertEquals(true,g.existsEdge(1,2));
         Assert.assertEquals(true,g.existsEdge(1,4));
         Assert.assertEquals(true,g.existsEdge(4,5));
