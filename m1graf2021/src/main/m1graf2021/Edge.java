@@ -67,7 +67,7 @@ public class Edge implements Comparable<Edge>{
 
     @Override
     public String toString() {
-        String ret= "["+source.toString()+"-"+target.toString()+"]";
+        String ret= source.toString()+"->"+target.toString();
         if(weightDefined){
             ret+="("+weight+")";
         }

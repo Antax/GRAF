@@ -68,23 +68,35 @@ public class Graf{
                     if(!line.contains("{")&&!line.contains("}")) {
                         //A node (with a label)
                         if (!line.contains("->")) {
-                            int id=Integer.parseInt(line.substring(0,line.indexOf('[')));
-                            String label=line.substring(line.indexOf("\"")+1,line.lastIndexOf("\"")-1).trim();
-                            addNode(new Node(id,label));
+                            addNode(Integer.parseInt(line.substring(0,line.length()-1)));
                         }
                         //An edge
                         if (line.contains("->")) {
-
+                            int from=Integer.parseInt(line.substring(0,line.indexOf("-")-1).trim());
                             if(!line.contains("len")){
-                                int from=Integer.parseInt(line.substring(0,line.indexOf("-")-1).trim());
-                                int to=Integer.parseInt(line.substring(line.indexOf(">")+1,line.indexOf(";")).trim());
-                                addEdge(from,to);
+                                int i=line.indexOf(">")+2;
+                                while(i<line.length()){
+                                    String out="";
+                                    while(line.charAt(i)!=',' && line.charAt(i)!=';'){
+                                        out+=line.charAt(i);
+                                        ++i;
+                                    }
+                                    addEdge(from,Integer.parseInt(out));
+                                    i+=2;
+                                }
                             }else{
-                                int from=Integer.parseInt(line.substring(0,line.indexOf("-")-1).trim());
-                                int to=Integer.parseInt(line.substring(line.indexOf(">")+1,line.indexOf("[")).trim());
                                 int weight=Integer.parseInt(line.substring(line.indexOf("\"")+1,line.lastIndexOf(",")-1).trim());
-                                addEdge(from,to);
-                                setEdgeWeight(from,to,weight);
+                                int i=line.indexOf(">")+2;
+                                while(i<line.substring(0,line.indexOf("[")).length()){
+                                    String out="";
+                                    while(line.charAt(i)!='[' && line.charAt(i)!=','){
+                                        out+=line.charAt(i);
+                                        ++i;
+                                    }
+                                    i+=2;
+                                    addEdge(from,Integer.parseInt(out));
+                                    setEdgeWeight(from,Integer.parseInt(out),weight);
+                                }
                             }
                         }
                     }
@@ -420,14 +432,33 @@ public class Graf{
 
     public String toDotString(){
         String res="digraph G {\n";
-        List<Edge> edges=getAllEdges();
-        Collections.sort(edges);
-        for (Edge e:edges) {
-            res+=e.from().toString()+" -> "+e.to().toString();
-            if(e.hasWeight()){
-                res+="[len="+e.weight()+",label="+e.weight()+"]";
+        List<Node> allNodes=getAllNodes();
+        Collections.sort(allNodes);
+        for (Node n:allNodes) {
+            res+=n.toString();
+            List<Edge>weightedEdges=new ArrayList<>();
+            boolean firstEdge=true;
+            List<Edge>outEdges=getOutEdges(n);
+            Collections.sort(outEdges);
+            for (Edge e:outEdges) {
+                if(e.hasWeight()){
+                    weightedEdges.add(e);
+                }else{
+                    if(firstEdge){
+                        firstEdge=false;
+                        res+=" ->";
+                    }else{
+                        res+=",";
+                    }
+                    res+=" "+e.to().toString();
+                }
             }
             res+=";\n";
+            if(!weightedEdges.isEmpty()){
+                for (Edge weightedEdge:weightedEdges) {
+                    res+=n.toString()+" -> "+weightedEdge.to().toString()+"[len="+String.valueOf(weightedEdge.weight())+",label="+String.valueOf(weightedEdge.weight())+"];\n";
+                }
+            }
         }
         res+='}';
         return res;

@@ -28,13 +28,13 @@ public class GrafTest {
         Node s= new Node(1,"source node");
         Node t= new Node(2,"target node");
         Edge e= new Edge(s,t);
-        Assert.assertEquals("[source node-target node]",e.toString());
+        Assert.assertEquals("source node->target node",e.toString());
     }
 
     @Test
     public void testEdgeCreateNewNodes(){
         Edge e= new Edge(1,2);
-        Assert.assertEquals("[1-2]",e.toString());
+        Assert.assertEquals("1->2",e.toString());
     }
 
     @Test
@@ -42,7 +42,7 @@ public class GrafTest {
         Node s= new Node(1,"source node");
         Node t= new Node(2,"target node");
         Edge e= new Edge(s,t,10);
-        Assert.assertEquals("[source node-target node](10)",e.toString());
+        Assert.assertEquals("source node->target node(10)",e.toString());
     }
 
     @Test
@@ -333,19 +333,18 @@ public class GrafTest {
         Graf g=new Graf(a);
         g.setEdgeWeight(1,4,5);
         String expected="digraph G {\n" +
-                "1 -> 2;\n" +
-                "1 -> 4[len=5,label=5];\n" +
-                "3 -> 6;\n" +
-                "4 -> 2;\n" +
-                "4 -> 3;\n" +
-                "4 -> 5;\n" +
-                "4 -> 8;\n" +
-                "6 -> 4;\n" +
-                "6 -> 7;\n" +
-                "7 -> 3;\n" +
-                "8 -> 7;\n" +
+                "1 -> 2;\n"+
+                "1 -> 4[len=5,label=5];\n"+
+                "2;\n"+
+                "3 -> 6;\n"+
+                "4 -> 2, 3, 5, 8;\n"+
+                "5;\n"+
+                "6 -> 4, 7;\n"+
+                "7 -> 3;\n"+
+                "8 -> 7;\n"+
                 "}";
         Assert.assertEquals(expected,g.toDotString());
+        System.out.println(g.toDotString());
     }
 
     @Test
@@ -364,8 +363,9 @@ public class GrafTest {
         Collections.sort(nodesFromDot);
 
 
-        int[] a={3, 4, 0, 0, 6, 0, 2, 3, 5, 8, 0, 0, 4, 7, 0, 3, 0, 7, 0};
+        int[] a={2, 4, 0, 0, 6, 0, 2, 3, 5, 8, 0, 0, 4, 7, 0, 3, 0, 7, 0};
         Graf expected=new Graf(a);
+        expected.setEdgeWeight(1,4,5);
         List<Edge> edgesExpected=expected.getAllEdges();
         Collections.sort(edgesExpected);
         List<Node> nodesExpected=expected.getAllNodes();
@@ -373,7 +373,7 @@ public class GrafTest {
 
         Assert.assertEquals(edgesExpected,edgesFromDot);
         Assert.assertEquals(nodesExpected,nodesFromDot);
-        Assert.assertEquals(32,graphFromDot.getEdge(new Edge(3,6)).weight());
+        Assert.assertEquals(5,graphFromDot.getEdge(new Edge(1,4)).weight());
     }
 
     @Test
