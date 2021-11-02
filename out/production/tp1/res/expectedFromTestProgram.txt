@@ -1,0 +1,298 @@
+>>>>>>>> Creating the subject example graph in G
+>>>> Graph information
+>> DOT representation
+digraph {
+	1 -> 2, 4;
+	2;
+	3 -> 6;
+	4 -> 2, 3, 5, 8;
+	5;
+	6 -> 4, 7;
+	7 -> 3;
+	8 -> 7;
+}
+
+8 nodes, 11 edges
+>> Nodes:
+Node 1: degree 2 (in: 0/ out: 2)
+Node 2: degree 2 (in: 2/ out: 0)
+Node 3: degree 3 (in: 2/ out: 1)
+Node 4: degree 6 (in: 2/ out: 4)
+Node 5: degree 1 (in: 1/ out: 0)
+Node 6: degree 3 (in: 1/ out: 2)
+Node 7: degree 3 (in: 2/ out: 1)
+Node 8: degree 2 (in: 1/ out: 1)
+>> Edges:
+---------------------------
+Out-edges per node
+1: [1->2, 1->4]
+2: []
+3: [3->6]
+4: [4->2, 4->3, 4->5, 4->8]
+5: []
+6: [6->4, 6->7]
+7: [7->3]
+8: [8->7]
+In-edges per node
+1: []
+2: [1->2, 4->2]
+3: [4->3, 7->3]
+4: [1->4, 6->4]
+5: [4->5]
+6: [3->6]
+7: [6->7, 8->7]
+8: [4->8]
+
+>>>>>>>> creating isolated node 12
+Graph now:
+digraph {
+	1 -> 2, 4;
+	2;
+	3 -> 6;
+	4 -> 2, 3, 5, 8;
+	5;
+	6 -> 4, 7;
+	7 -> 3;
+	8 -> 7;
+	12;
+}
+
+9 nodes, 11 edges
+Nodes list: [1, 2, 3, 4, 5, 6, 7, 8, 12]
+
+>>>>>>>> Removing node 3
+Graph now:
+digraph {
+	1 -> 2, 4;
+	2;
+	4 -> 2, 5, 8;
+	5;
+	6 -> 4, 7;
+	7;
+	8 -> 7;
+	12;
+}
+
+8 nodes, 8 edges
+Nodes list: [1, 2, 4, 5, 6, 7, 8, 12]
+>> Edges:
+---------------------------
+Out-edges per node
+1: [1->2, 1->4]
+2: []
+4: [4->2, 4->5, 4->8]
+5: []
+6: [6->4, 6->7]
+7: []
+8: [8->7]
+12: []
+In-edges per node
+1: []
+2: [1->2, 4->2]
+4: [1->4, 6->4]
+5: [4->5]
+6: []
+7: [6->7, 8->7]
+8: [4->8]
+12: []
+
+>>>>>>>> Recreating edges (4, 3), (3, 6), (7, 3), adding edge (12, 3), creating edge (3, 25)
+Graph now:
+digraph {
+	1 -> 2, 4;
+	2;
+	3 -> 6, 25;
+	4 -> 2, 3, 5, 8;
+	5;
+	6 -> 4, 7;
+	7 -> 3;
+	8 -> 7;
+	12 -> 3;
+	25;
+}
+
+10 nodes, 13 edges
+Nodes list: [1, 2, 3, 4, 5, 6, 7, 8, 12, 25]
+
+
+>>>>>>>>  Edges removal
+>>>> Removing existing edges (7, 3) and (4, 8)
+>>>> Removing absent edge (3, 4)
+>>>> Removing edges whith 1 or 2 not existing end-points: (-3, 4), (6, 0), (4, 11), (-1, -2), (13, 3), (9, 10)
+Graph now:
+digraph {
+	1 -> 2, 4;
+	2;
+	3 -> 6, 25;
+	4 -> 2, 3, 5;
+	5;
+	6 -> 4, 7;
+	7;
+	8 -> 7;
+	12 -> 3;
+	25;
+}
+
+10 nodes, 11 edges
+Nodes list: [1, 2, 3, 4, 5, 6, 7, 8, 12, 25]
+
+>>>>>>>> MULTIGRAPH: adding a self-loop on node 6, and a second edge (1, 4)
+Graph now:
+digraph {
+	1 -> 2, 4, 4;
+	2;
+	3 -> 6, 25;
+	4 -> 2, 3, 5;
+	5;
+	6 -> 4, 6, 7;
+	7;
+	8 -> 7;
+	12 -> 3;
+	25;
+}
+
+10 nodes, 13 edges
+Nodes list: [1, 2, 3, 4, 5, 6, 7, 8, 12, 25]
+Degree of node 6: 5 (in: 2/ out: 3)
+>> Edges:
+---------------------------
+Out-edges per node
+1: [1->2, 1->4, 1->4]
+2: []
+3: [3->6, 3->25]
+4: [4->2, 4->3, 4->5]
+5: []
+6: [6->4, 6->6, 6->7]
+7: []
+8: [8->7]
+12: [12->3]
+25: []
+In-edges per node
+1: []
+2: [1->2, 4->2]
+3: [4->3, 12->3]
+4: [1->4, 1->4, 6->4]
+5: [4->5]
+6: [3->6, 6->6]
+7: [6->7, 8->7]
+8: []
+12: []
+25: [3->25]
+>>>>>>>>>>    Get the reverse graph
+digraph {
+	1;
+	2 -> 1, 4;
+	3 -> 4, 12;
+	4 -> 1, 1, 6;
+	5 -> 4;
+	6 -> 3, 6;
+	7 -> 6, 8;
+	8;
+	12;
+	25 -> 3;
+}
+
+>>>>>>>>>>    Get the transitive closure
+digraph {
+	1 -> 2, 3, 4, 5, 6, 7, 25;
+	2;
+	3 -> 2, 4, 5, 6, 7, 25;
+	4 -> 2, 3, 5, 6, 7, 25;
+	5;
+	6 -> 2, 3, 4, 5, 7, 25;
+	7;
+	8 -> 7;
+	12 -> 2, 3, 4, 5, 6, 7, 25;
+	25;
+}
+
+>>>>>>>>>>    Emptying the graph by removing all its nodes
+Graph now:
+digraph {
+}
+
+>>>> Searching for node 7
+There is no Node 7
+>>>> Searching for edge (4, 2)
+There is no edge (4, 2)
+
+------------------------------
+Now Testing UNDIRECTED GRAPHS
+------------------------------
+Building undirected graph gu, with multi-edges and self-loops
+graph {
+	1 -- 1, 1, 2, 2, 3;
+	2 -- 2, 3;
+	3;
+}
+
+gu has 3 nodes and 7 edges.
+
+>>>>>> Counting degrees and showing successors
+Node 1. Degree: 7 (In: 7 / Out: 7)
+	Successors: [1, 2, 3]
+Node 2. Degree: 5 (In: 5 / Out: 5)
+	Successors: [1, 2, 3]
+Node 3. Degree: 2 (In: 2 / Out: 2)
+	Successors: [1, 2]
+>>>>>> Edges of the graph
+All edges of the graph: [1->1, 1->1, 1->2, 1->2, 1->3, 2->2, 2->3]
+Out-edges per node
+1: [1->1, 1->1, 1->2, 1->2, 1->3]
+2: [2->1, 2->1, 2->2, 2->3]
+3: [3->1, 3->2]
+In-edges per node
+1: [1->1, 1->1, 1->2, 1->2, 1->3]
+2: [2->1, 2->1, 2->2, 2->3]
+3: [3->1, 3->2]
+Incident edges per node
+1: [1->1, 1->1, 1->2, 1->2, 1->3]
+2: [2->1, 2->1, 2->2, 2->3]
+3: [3->1, 3->2]
+
+>>>>>> Successor Array, Adjacency Matrix, and Graph Reverse
+gu Successor array
+[1, 1, 2, 2, 3, 0, 2, 3, 0, 0]
+gu Adjacency Matrix
+	[2, 2, 1]
+	[2, 1, 1]
+	[1, 1, 0]
+Testing via toDotString() the equality with the reverse graph
+DOT of the reverse of gu
+graph {
+	1 -- 1, 1, 2, 2, 3;
+	2 -- 2, 3;
+	3;
+}
+
+Graph gu and its reverse are identical
+-----------------
+      NOW a disconnected GRAPH
+----------------
+Building guDisc, a disconnected undirected graph with multi-edges and self-loops
+graph {
+	1 -- 1, 1, 2, 2, 6;
+	2 -- 2, 3, 6;
+	3;
+	4 -- 6;
+	5 -- 6;
+	6;
+	8 -- 9, 10;
+	9;
+	10;
+}
+
+>>>> DFS of guDisc: [1, 2, 3, 6, 4, 5, 8, 9, 10]
+>>>> BFS of guDisc: [1, 2, 6, 3, 4, 5, 8, 9, 10]
+>>>>>>> Computing guDisc's transitive closure
+graph {
+	1 -- 2, 3, 4, 5, 6;
+	2 -- 3, 4, 5, 6;
+	3 -- 4, 5, 6;
+	4 -- 5, 6;
+	5 -- 6;
+	6;
+	8 -- 9, 10;
+	9 -- 10;
+	10;
+}

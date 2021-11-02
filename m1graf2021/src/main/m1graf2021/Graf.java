@@ -161,6 +161,8 @@ public class Graf{
         if(n==null){
             return false;
         }
+        for (Node key:adjEdList.keySet() ) {
+        }
         return adjEdList.containsKey(n);
     }
 
@@ -193,11 +195,11 @@ public class Graf{
     }
 
     public void removeNode(Node n){
-        adjEdList.remove(n);
         List<Edge> toRemove=getInEdges(n);
         for(int i=0;i<toRemove.size();++i){
             removeEdge(toRemove.get(i));
         }
+        adjEdList.remove(n);
     }
 
     public void removeNode(int id){
@@ -279,6 +281,7 @@ public class Graf{
         if(from==null||to==null){
             return;
         }
+        System.out.println(from+" "+to);
         if(existsEdge(from,to)){
             adjEdList.get(from).remove(new Edge(from,to));
         }
@@ -604,5 +607,20 @@ public class Graf{
             }
         }
         return new Pair<>(result, visitedNodes);
+    }
+
+    /*
+    TODO
+     */
+    public List<Node> getReach(Node n){
+        if(!existsNode(n)){
+            return null;
+        }
+        List<Node> reachableNodes=new ArrayList<>();
+        return reachableNodes;
+    }
+
+    public List<Node> getReach(int id){
+        return getReach(new Node(id));
     }
 }
