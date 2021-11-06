@@ -447,4 +447,26 @@ public class GrafTest {
         System.out.println(g.toDotString());
         System.out.println(g.getDFS().toString());
     }
+
+    @Test
+    public void testTransitiveClosureWithMultiAndSelfEdges(){
+        Graf g=new Graf(1,2,3,0,4,4,0,4,0,5,6,0,0,0);
+        System.out.println(g.toDotString());
+        Graf gExpected=new Graf(2,3,4,5,6,0,4,5,6,0,4,5,6,0,5,6,0,0,0);
+        System.out.println(gExpected.toDotString());
+
+        Graf gTransitiveClosure=g.getTransitiveClosure();
+        List<Node>nodesTransitiveClosure=gTransitiveClosure.getAllNodes();
+        Collections.sort(nodesTransitiveClosure);
+        List<Edge>edgesTransitiveClosure=gTransitiveClosure.getAllEdges();
+        Collections.sort(edgesTransitiveClosure);
+
+        List<Node>nodesExpected=gExpected.getAllNodes();
+        Collections.sort(nodesExpected);
+        List<Edge>edgesExpected=gExpected.getAllEdges();
+        Collections.sort(edgesExpected);
+
+        Assert.assertEquals(nodesExpected,nodesTransitiveClosure);
+        Assert.assertEquals(edgesExpected,edgesTransitiveClosure);
+    }
 }

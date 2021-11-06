@@ -609,18 +609,54 @@ public class Graf{
         return new Pair<>(result, visitedNodes);
     }
 
-    /*
-    TODO
-     */
-    public List<Node> getReach(Node n){
-        if(!existsNode(n)){
+    public List<Node> bfsFromOneNode(Node startingNode){
+        if(!existsNode(startingNode)){
             return null;
         }
-        List<Node> reachableNodes=new ArrayList<>();
-        return reachableNodes;
+
+        List<Node> allNodes=getAllNodes();
+
+        Map<Node, Boolean> visitedNodes=new HashMap<>();
+
+        for (Node n :allNodes) {
+            visitedNodes.put(n,false);
+        }
+
+        LinkedList<Node> queue=new LinkedList<>();
+        queue.add(startingNode);
+
+        LinkedList<Node> result=new LinkedList<>();
+        result.add(startingNode);
+
+        visitedNodes.replace(startingNode,true);
+
+        while(!queue.isEmpty()){
+            Node current=queue.removeFirst();
+            for (Node n:getSuccessors(current)) {
+                if(!visitedNodes.get(n)){
+                    visitedNodes.replace(n,true);
+                    queue.add(n);
+                    result.add(n);
+                }
+            }
+        }
+        return result;
     }
 
-    public List<Node> getReach(int id){
-        return getReach(new Node(id));
+    public List<Node> bfsFromOneNode(int id){
+        return bfsFromOneNode(new Node(id));
+    }
+
+    public Graf getTransitiveClosure(){
+        Graf resGraf=new Graf();
+        for (Node n:this.getAllNodes()) {
+            List<Node> reachableNodes = bfsFromOneNode(n);
+            for(Node reachableNode : reachableNodes){
+                if(!reachableNode.equals(n)) {
+                    resGraf.addEdge(n,reachableNode);
+                }
+            }
+        }
+        return resGraf;
     }
 }
