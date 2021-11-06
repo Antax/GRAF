@@ -1,6 +1,6 @@
 package main.m1graf2021;
 
-import javafx.util.Pair;
+//import javafx.util.Pair;
 
 import java.io.*;
 import java.util.*;
@@ -589,8 +589,8 @@ public class Graf{
         for (Node n: allNodes) {
             if(!visitedNodes.get(n)){
                 Pair<LinkedList<Node>,Map<Node,Boolean>> dfsVisitRes = dfsVisit(n,result,visitedNodes);
-                result=dfsVisitRes.getKey();
-                visitedNodes=dfsVisitRes.getValue();
+                result=dfsVisitRes.getFirst();
+                visitedNodes=dfsVisitRes.getSecond();
             }
         }
         return result;
@@ -602,8 +602,8 @@ public class Graf{
         for (Node adj:getSuccessors(n)) {
             if(!visitedNodes.get(adj)){
                 Pair<LinkedList<Node>,Map<Node,Boolean>> dfsVisitRes=dfsVisit(adj,result,visitedNodes);
-                result=dfsVisitRes.getKey();
-                visitedNodes=dfsVisitRes.getValue();
+                result=dfsVisitRes.getFirst();
+                visitedNodes=dfsVisitRes.getSecond();
             }
         }
         return new Pair<>(result, visitedNodes);
