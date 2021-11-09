@@ -1,6 +1,6 @@
 package main.m1graf2021;
 
-//import javafx.util.Pair;
+import sun.rmi.runtime.Log;
 
 import java.io.*;
 import java.util.*;
@@ -43,6 +43,12 @@ public class Graf{
             }
             ++numberOfNode;
             ++i;
+        }
+
+        for (Node n : getAllNodes()){
+            if(getOutEdges(n).isEmpty() && getInEdges(n).isEmpty()){
+                removeNode(n);
+            }
         }
     }
 
@@ -122,9 +128,6 @@ public class Graf{
         if(!existsNode(to)){
             addNode(to);
         }
-        if(!existsNode(from) || !existsNode(to)){
-            return;
-        }
         adjEdList.get(from).add(new Edge(from,to));
     }
 
@@ -160,8 +163,6 @@ public class Graf{
     public boolean existsNode(Node n){
         if(n==null){
             return false;
-        }
-        for (Node key:adjEdList.keySet() ) {
         }
         return adjEdList.containsKey(n);
     }
@@ -281,7 +282,6 @@ public class Graf{
         if(from==null||to==null){
             return;
         }
-        System.out.println(from+" "+to);
         if(existsEdge(from,to)){
             adjEdList.get(from).remove(new Edge(from,to));
         }
@@ -314,12 +314,12 @@ public class Graf{
     }
 
     public List<Edge> getInEdges(Node n){
-        List<Edge> res=new ArrayList<Edge>();
-        for (List<Edge> value : adjEdList.values()) {
-            for(int i=0;i<value.size();++i){
-                if(value.get(i).to().equals(n)){
-                    res.add(value.get(i));
-                }
+        List<Edge> res=new LinkedList<>();
+        List<Edge> allEdges=getAllEdges();
+        Collections.sort(allEdges);
+        for(Edge e:allEdges){
+            if(e.to().equals(n)){
+                res.add(e);
             }
         }
         return res;
@@ -345,8 +345,10 @@ public class Graf{
         }
         List<Edge> edgesFromN=adjEdList.get(n);
         List<Node> res=new ArrayList<>();
-        for(int i=0;i<edgesFromN.size();++i){
-            res.add(edgesFromN.get(i).to());
+        for (Edge toAdd : edgesFromN) {
+            if (!res.contains(toAdd.to())) {
+                res.add(toAdd.to());
+            }
         }
         return res;
     }
@@ -423,7 +425,7 @@ public class Graf{
             return -1;
         }
         int res=inDegree(n)+outDegree(n);
-        if(existsEdge(4,4)){
+        if(existsEdge(n,n)){
             res--;
         }
         return res;
@@ -434,7 +436,7 @@ public class Graf{
     }
 
     public String toDotString(){
-        String res="digraph G {\n";
+        String res="digraph {\n";
         List<Node> allNodes=getAllNodes();
         Collections.sort(allNodes);
         for (Node n:allNodes) {
@@ -503,9 +505,8 @@ public class Graf{
             }
         }
         List<Edge>edges=getAllEdges();
-        for(int i=0;i<edges.size();++i){
-            Edge e=edges.get(i);
-            res[e.from().getId()-1][e.to().getId()-1]++;
+        for (Edge e : edges) {
+            res[e.from().getId() - 1][e.to().getId() - 1]++;
         }
         return res;
     }
@@ -515,10 +516,10 @@ public class Graf{
         ArrayList<Integer> arrayList = new ArrayList<Integer>();
         List<Node>nodes=getAllNodes();
         Collections.sort(nodes);
-        for(int i=0;i<nodes.size();++i){
-            List<Edge>edgesFromCurrentNode=getOutEdges(nodes.get(i));
-            for(int j=0;j<edgesFromCurrentNode.size();++j){
-                arrayList.add(edgesFromCurrentNode.get(j).to().getId());
+        for (Node node : nodes) {
+            List<Edge> edgesFromCurrentNode = getOutEdges(node);
+            for (Edge edge : edgesFromCurrentNode) {
+                arrayList.add(edge.to().getId());
             }
             arrayList.add(0);
         }
@@ -547,7 +548,7 @@ public class Graf{
 
     public List<Node> getBFS(){
         List<Node> allNodes=getAllNodes();
-
+        Collections.sort(allNodes);
         Map<Node, Boolean> visitedNodes=new HashMap<>();
 
         for (Node n :allNodes) {
@@ -556,28 +557,38 @@ public class Graf{
         Node firstNode=allNodes.get(0);
 
         LinkedList<Node> queue=new LinkedList<>();
-        queue.add(firstNode);
 
         LinkedList<Node> result=new LinkedList<>();
-        result.add(firstNode);
 
         visitedNodes.replace(firstNode,true);
 
-        while(!queue.isEmpty()){
-            Node current=queue.removeFirst();
-            for (Node n:getSuccessors(current)) {
-                if(!visitedNodes.get(n)){
-                    visitedNodes.replace(n,true);
-                    queue.add(n);
-                    result.add(n);
+        while(!allNodes.isEmpty()){
+            queue.add(allNodes.get(0));
+            result.add(allNodes.get(0));
+            while(!queue.isEmpty()){
+                Node current=queue.removeFirst();
+                visitedNodes.replace(current,true);
+                allNodes.remove(current);
+                queue.remove(current);
+
+                List<Node> successors = getSuccessors(current);
+                Collections.sort(successors);
+                for (Node n : successors) {
+                    if(!visitedNodes.get(n)){
+                        visitedNodes.replace(n,true);
+                        queue.add(n);
+                        result.add(n);
+                    }
                 }
             }
         }
+
         return result;
     }
 
     public List<Node> getDFS(){
         List<Node> allNodes=getAllNodes();
+        Collections.sort(allNodes);
 
         Map<Node, Boolean> visitedNodes=new HashMap<>();
 
@@ -615,6 +626,7 @@ public class Graf{
         }
 
         List<Node> allNodes=getAllNodes();
+        Collections.sort(allNodes);
 
         Map<Node, Boolean> visitedNodes=new HashMap<>();
 
@@ -632,7 +644,9 @@ public class Graf{
 
         while(!queue.isEmpty()){
             Node current=queue.removeFirst();
-            for (Node n:getSuccessors(current)) {
+            List<Node> successors = getSuccessors(current);
+            Collections.sort(successors);
+            for (Node n : successors) {
                 if(!visitedNodes.get(n)){
                     visitedNodes.replace(n,true);
                     queue.add(n);

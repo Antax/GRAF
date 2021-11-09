@@ -148,8 +148,8 @@ public class testProgram{
         System.out.println(">>>>>>>>>>    Get the reverse graph");
         System.out.println(g.getReverse().toDotString());
 
-        //System.out.println(">>>>>>>>>>    Get the transitive closure");
-        //System.out.println(g.getTransitiveClosure().toDotString());
+        System.out.println(">>>>>>>>>>    Get the transitive closure");
+        System.out.println(g.getTransitiveClosure().toDotString());
 
         System.out.println(">>>>>>>>>>    Emptying the graph by removing all its nodes");
         nodes = g.getAllNodes();
@@ -175,7 +175,7 @@ public class testProgram{
         System.out.println("Now Testing UNDIRECTED GRAPHS");
         System.out.println("------------------------------");
 
-        /*System.out.println("Building undirected graph gu, with multi-edges and self-loops");
+        System.out.println("Building undirected graph gu, with multi-edges and self-loops");
         UndirectedGraf gu = new UndirectedGraf(1,1,2,2,3,0, 2,3,0, 0);
 
         String dotGU = gu.toDotString();
@@ -223,7 +223,7 @@ public class testProgram{
 
         System.out.println(">>>>>>> Computing guDisc's transitive closure");
         UndirectedGraf guDiscTC = guDisc.getTransitiveClosure();
-        System.out.println(guDiscTC.toDotString());*/
+        System.out.println(guDiscTC.toDotString());
 
     }
 

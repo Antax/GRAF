@@ -73,7 +73,7 @@ public class GrafTest {
     @Test
     public void testNbNodes(){
         int[] a={2, 4, 0, 0, 6, 0, 2, 3, 5, 8, 0, 0, 4, 7, 0, 3, 0, 7, 0};
-        Graf g=new Graf(a);
+        UndirectedGraf g=new UndirectedGraf(a);
         Assert.assertEquals(8,g.nbNodes());
     }
 
@@ -177,11 +177,11 @@ public class GrafTest {
     public void testGetInEdges(){
         int[] a={2, 4, 0, 0, 6, 0, 2, 3, 5, 8, 0, 0, 4, 7, 0, 3, 0, 7, 0};
         Graf g=new Graf(a);
+        System.out.println(g.toDotString());
         List<Edge>l=g.getInEdges(new Node(4));
         List<Edge> expected=new ArrayList<Edge>();
         expected.add(new Edge(6,4));
         expected.add(new Edge(1,4));
-        Collections.sort(l);
         Collections.sort(expected);
         Assert.assertEquals(expected,l);
     }
@@ -332,7 +332,7 @@ public class GrafTest {
         int[] a={2, 4, 0, 0, 6, 0, 2, 3, 5, 8, 0, 0, 4, 7, 0, 3, 0, 7, 0};
         Graf g=new Graf(a);
         g.setEdgeWeight(1,4,5);
-        String expected="digraph G {\n" +
+        String expected="digraph {\n" +
                 "1 -> 2;\n"+
                 "1 -> 4[len=5,label=5];\n"+
                 "2;\n"+
@@ -354,7 +354,7 @@ public class GrafTest {
         g.toDotFile("\\D:\\M1\\GRAF\\test.dot");
     }
 
-    @Test
+    /*@Test
     public void testDotToGraph(){
         Graf graphFromDot=new Graf("\\D:\\M1\\GRAF\\test.dot");
         List<Edge> edgesFromDot=graphFromDot.getAllEdges();
@@ -374,7 +374,7 @@ public class GrafTest {
         Assert.assertEquals(edgesExpected,edgesFromDot);
         Assert.assertEquals(nodesExpected,nodesFromDot);
         Assert.assertEquals(5,graphFromDot.getEdge(new Edge(1,4)).weight());
-    }
+    }*/
 
     @Test
     public void testToAdjMatrix(){
