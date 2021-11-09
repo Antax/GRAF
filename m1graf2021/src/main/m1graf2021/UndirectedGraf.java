@@ -8,43 +8,9 @@ public class UndirectedGraf extends Graf{
         super();
     }
 
+
     public UndirectedGraf(int... ids){
-        int[] data=new int[ids.length];
-        int j=0;
-        for(int id : ids) {
-            data[j]=id;
-            ++j;
-        }
-        adjEdList = new HashMap<>();
-        int numberOfNode=1;
-        int i=0;
-        while(i<data.length) {
-            List<Edge> currentNodeEdges = new ArrayList<Edge>();
-            Node currentNode=getNode(numberOfNode);
-            if(currentNode==null) {
-                currentNode = new Node(numberOfNode);
-                addNode(currentNode);
-            }
-            while (data[i]!=0){
-                Node target=getNode(data[i]);
-                if(target==null){
-                    target=new Node (data[i]);
-                    addNode(target);
-                }
-                currentNodeEdges.add(new Edge(currentNode,target));
-                ++i;
-            }
-            for(int e=0;e<currentNodeEdges.size();++e){
-                addEdge(currentNode,currentNodeEdges.get(e).to());
-            }
-            ++numberOfNode;
-            ++i;
-        }
-        for (Node n : getAllNodes()){
-            if(getOutEdges(n).isEmpty() || getInEdges(n).isEmpty()){
-                removeNode(n);
-            }
-        }
+        super(ids);
     }
 
     /**

@@ -39,7 +39,8 @@ public class Graf{
                 ++i;
             }
             for(int e=0;e<currentNodeEdges.size();++e){
-                adjEdList.get(currentNode).add(currentNodeEdges.get(e));
+                //adjEdList.get(currentNode).add(currentNodeEdges.get(e));
+                addEdge(currentNodeEdges.get(e));
             }
             ++numberOfNode;
             ++i;
@@ -58,6 +59,10 @@ public class Graf{
      */
     public Graf(String pathToDotFile){
         adjEdList=new HashMap<>();
+        if(pathToDotFile.length()<=4){
+            System.out.println("Not a valid file path");
+            return;
+        }
         String pathWithoutExtension = pathToDotFile.substring(pathToDotFile.length() - 4);
         if(!pathWithoutExtension.equals(".dot")){
             System.out.println(pathWithoutExtension +" The file must be a dot file");
