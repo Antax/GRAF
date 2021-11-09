@@ -8,7 +8,12 @@ import java.util.*;
 import main.m1graf2021.*;
 
 public class testProgram{
-
+    /**
+     * Check if the imported graph is an Undirected Graph, parsing the first line of the .dot file
+     *
+     * @param path the source of the dot file
+     * @return a boolean that specify if the graph is Symmetric (Undirected) or not
+     */
     public static boolean isSym(String path) throws IOException {
         BufferedReader reader;
         try {
@@ -31,6 +36,11 @@ public class testProgram{
         return false;
     }
 
+    /**
+     * Function which scans the user input
+     *
+     * @return the choice of the user entering the weight of the edge
+     */
     public static int addWeightMenu() {
         int selection;
         Scanner input = new Scanner(System.in);
@@ -43,6 +53,11 @@ public class testProgram{
         return selection;
     }
 
+    /**
+     * Function which scans the user input
+     *
+     * @return the choice of the user entering the path of the file he want to export
+     */
     public static String enterDotPathWriteMenu() {
         String selection;
         Scanner input = new Scanner(System.in);
@@ -55,6 +70,11 @@ public class testProgram{
         return selection;
     }
 
+    /**
+     * Function which scans the user input
+     *
+     * @return the choice of the user entering the path of the file he want to read
+     */
     public static String enterDotPathReadMenu() {
         String selection;
         Scanner input = new Scanner(System.in);
@@ -67,6 +87,11 @@ public class testProgram{
         return selection;
     }
 
+    /**
+     * Function which scans the user input
+     *
+     * @return the choice of the user entering the id of the tail of the edge he want to remove
+     */
     public static int removeEdgeFromMenu() {
         int selection;
         Scanner input = new Scanner(System.in);
@@ -79,6 +104,11 @@ public class testProgram{
         return selection;
     }
 
+    /**
+     * Function which scans the user input
+     *
+     * @return the choice of the user entering the id of the head of the edge he want to remove
+     */
     public static int removeEdgeToMenu() {
         int selection;
         Scanner input = new Scanner(System.in);
@@ -91,6 +121,11 @@ public class testProgram{
         return selection;
     }
 
+    /**
+     * Function which scans the user input
+     *
+     * @return the choice of the user entering the id of the tail of the edge he want to add to the graph
+     */
     public static int addEdgeFromMenu() {
         int selection;
         Scanner input = new Scanner(System.in);
@@ -103,6 +138,11 @@ public class testProgram{
         return selection;
     }
 
+    /**
+     * Function which scans the user input
+     *
+     * @return the choice of the user entering the id of the head of the edge he want to add to the graph
+     */
     public static int addEdgeToMenu() {
         int selection;
         Scanner input = new Scanner(System.in);
@@ -115,6 +155,11 @@ public class testProgram{
         return selection;
     }
 
+    /**
+     * Function which scans the user input
+     *
+     * @return the choice of the user entering the id of node he want to remove
+     */
     public static int removeNodeMenu() {
         int selection;
         Scanner input = new Scanner(System.in);
@@ -127,6 +172,11 @@ public class testProgram{
         return selection;
     }
 
+    /**
+     * Function which scans the user input
+     *
+     * @return the choice of the user entering the id of node he want to add
+     */
     public static int addNodeMenu() {
         int selection;
         Scanner input = new Scanner(System.in);
@@ -139,6 +189,11 @@ public class testProgram{
         return selection;
     }
 
+    /**
+     * Function which scans the user input
+     *
+     * @return the choice of the user asked about the type of the graph (directed or not)
+     */
     public static String createEmptyGraphSymmetricMenu() {
 
         String selection;
@@ -153,6 +208,11 @@ public class testProgram{
         return selection;
     }
 
+    /**
+     * Function which scans the user input
+     *
+     * @return the choice of the user asked about the type of the graph (weighted or not)
+     */
     public static String createEmptyGraphWeightedMenu() {
 
         String selection;
@@ -167,6 +227,12 @@ public class testProgram{
         return selection;
     }
 
+    /**
+     * Function which scans the user input
+     * The interactive menu reacts to 13 different inputs
+     *
+     * @return the choice of the user asked about the action he wanted to do
+     */
     public static int menu() {
 
         int selection;
