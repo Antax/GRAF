@@ -367,4 +367,8 @@ public class UndirectedGraf extends Graf{
         }
         return resGraf;
     }
+
+    public Boolean isWeighted() {
+        return super.isWeighted();
+    }
 }

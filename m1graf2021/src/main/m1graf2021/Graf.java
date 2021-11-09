@@ -8,11 +8,20 @@ import java.util.*;
 public class Graf{
     Map<Node, List<Edge>> adjEdList;
 
+    /**
+     * Creates en empty graph
+     */
     public Graf() {
         adjEdList = new HashMap<>();
     }
 
+    /**
+     * Creates a graph, using a successor array
+     *
+     * @param ids an array of integer or variadics integer arguments, representing a successor array
+     */
     public Graf(int... ids){
+        //converting the arguments into an array
         int[] data=new int[ids.length];
         int j=0;
         for(int id : ids) {
@@ -38,14 +47,14 @@ public class Graf{
                 currentNodeEdges.add(new Edge(currentNode,target));
                 ++i;
             }
-            for(int e=0;e<currentNodeEdges.size();++e){
-                //adjEdList.get(currentNode).add(currentNodeEdges.get(e));
-                addEdge(currentNodeEdges.get(e));
+            for (Edge currentNodeEdge : currentNodeEdges) {
+                addEdge(currentNodeEdge);
             }
             ++numberOfNode;
             ++i;
         }
 
+        //removing nodes that arent' connected to anyother node
         for (Node n : getAllNodes()){
             if(getOutEdges(n).isEmpty() && getInEdges(n).isEmpty()){
                 removeNode(n);
@@ -54,18 +63,21 @@ public class Graf{
     }
 
     /**
+     * Creates a graf using a dot file
      *
      * @param pathToDotFile the absolute path to a dot file (simplified version, according to the subject)
      */
     public Graf(String pathToDotFile){
         adjEdList=new HashMap<>();
+        //if the size isn't enough to contain .dot
         if(pathToDotFile.length()<=4){
             System.out.println("Not a valid file path");
             return;
         }
-        String pathWithoutExtension = pathToDotFile.substring(pathToDotFile.length() - 4);
-        if(!pathWithoutExtension.equals(".dot")){
-            System.out.println(pathWithoutExtension +" The file must be a dot file");
+        //If this isn't a dot file path
+        String pathExtension = pathToDotFile.substring(pathToDotFile.length() - 4);
+        if(!pathExtension.equals(".dot")){
+            System.out.println(pathExtension +" The file must be a dot file");
             return;
         }
         BufferedReader reader;
@@ -78,14 +90,15 @@ public class Graf{
                     line=line.trim();
                     if(!line.contains("{")&&!line.contains("}")) {
                         //A node (with a label)
-                        if (!line.contains("->")) {
+                        if (!line.contains("->") && !line.contains("--")) {
                             addNode(Integer.parseInt(line.substring(0,line.length()-1)));
                         }
                         //An edge
-                        if (line.contains("->")) {
+                        if (line.contains("->") || line.contains("--")) {
                             int from=Integer.parseInt(line.substring(0,line.indexOf("-")-1).trim());
+                            //not a weighted edge
                             if(!line.contains("len")){
-                                int i=line.indexOf(">")+2;
+                                int i=line.indexOf("-")+3;
                                 while(i<line.length()){
                                     String out="";
                                     while(line.charAt(i)!=',' && line.charAt(i)!=';'){
@@ -95,18 +108,18 @@ public class Graf{
                                     addEdge(from,Integer.parseInt(out));
                                     i+=2;
                                 }
-                            }else{
+                            }else{ //a weighted edge
                                 int weight=Integer.parseInt(line.substring(line.indexOf("\"")+1,line.lastIndexOf(",")-1).trim());
-                                int i=line.indexOf(">")+2;
+                                int i=line.indexOf("-")+3;
                                 while(i<line.substring(0,line.indexOf("[")).length()){
-                                    String out="";
+                                    StringBuilder out= new StringBuilder();
                                     while(line.charAt(i)!='[' && line.charAt(i)!=','){
-                                        out+=line.charAt(i);
+                                        out.append(line.charAt(i));
                                         ++i;
                                     }
                                     i+=2;
-                                    addEdge(from,Integer.parseInt(out));
-                                    setEdgeWeight(from,Integer.parseInt(out),weight);
+                                    addEdge(from,Integer.parseInt(out.toString()));
+                                    setEdgeWeight(from,Integer.parseInt(out.toString()),weight);
                                 }
                             }
                         }
@@ -119,10 +132,21 @@ public class Graf{
         }
     }
 
+    /**
+     * returns the number of nodes in the graph
+     *
+     * @return the number of nodes in the graph
+     */
     public int nbNodes(){
         return adjEdList.size();
     }
 
+    /**
+     * Adds an edge from two node. If the nodes don't exist in the graph, they are created.
+     *
+     * @param from the source node
+     * @param to the target node
+     */
     void addEdge(Node from, Node to){
         if(from==null || to==null){
             return;
@@ -136,10 +160,21 @@ public class Graf{
         adjEdList.get(from).add(new Edge(from,to));
     }
 
+    /**
+     * Adds an edge using two node's id. If the nodes don't exist in the graf, they are created
+     *
+     * @param from the source node's id
+     * @param to the target node's id
+     */
     public void addEdge(int from, int to){
         addEdge(new Node(from), new Node(to));
     }
 
+    /**
+     * Adds an edge.
+     *
+     * @param edge the edge to add
+     */
     public void addEdge(Edge edge){
         addEdge(edge.from(),edge.to());
     }
@@ -182,6 +217,8 @@ public class Graf{
         Node n=new Node(id);
         return existsNode(n);
     }
+
+
 
     public void addNode(Node n){
         if(existsNode(n)){
@@ -677,5 +714,14 @@ public class Graf{
             }
         }
         return resGraf;
+    }
+
+    public Boolean isWeighted(){
+        for (Edge e : getAllEdges()){
+            if(e.hasWeight()){
+                return true;
+            }
+        }
+        return false;
     }
 }
