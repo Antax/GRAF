@@ -1,6 +1,6 @@
 package main.m1graf2021;
 
-import sun.rmi.runtime.Log;
+//import sun.rmi.runtime.Log;
 
 import java.io.*;
 import java.util.*;

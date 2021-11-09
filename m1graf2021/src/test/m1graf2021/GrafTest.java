@@ -347,6 +347,7 @@ public class GrafTest {
         System.out.println(g.toDotString());
     }
 
+    /*
     @Test
     public void testToDotFile() throws FileNotFoundException {
         int[] a={3, 4, 0, 0, 6, 0, 2, 3, 5, 8, 0, 0, 4, 7, 0, 3, 0, 7, 0};
@@ -354,7 +355,7 @@ public class GrafTest {
         g.toDotFile("\\D:\\M1\\GRAF\\test.dot");
     }
 
-    /*@Test
+    @Test
     public void testDotToGraph(){
         Graf graphFromDot=new Graf("\\D:\\M1\\GRAF\\test.dot");
         List<Edge> edgesFromDot=graphFromDot.getAllEdges();
