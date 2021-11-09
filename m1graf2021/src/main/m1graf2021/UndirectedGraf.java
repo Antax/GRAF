@@ -8,7 +8,6 @@ public class UndirectedGraf extends Graf{
         super();
     }
 
-
     public UndirectedGraf(int... ids){
         super(ids);
     }
@@ -348,11 +347,11 @@ public class UndirectedGraf extends Graf{
     }
 
     public List<Node> bfsFromOneNode(Node startingNode){
-        return super.bfsFromOneNode(startingNode);
+        return super.reach(startingNode);
     }
 
-    public List<Node> bfsFromOneNode(int id){
-        return super.bfsFromOneNode(id);
+    public List<Node> reach(int id){
+        return super.reach(id);
     }
 
     public UndirectedGraf getTransitiveClosure(){
