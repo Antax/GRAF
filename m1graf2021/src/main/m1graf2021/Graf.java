@@ -678,4 +678,13 @@ public class Graf{
         }
         return resGraf;
     }
+
+    public Boolean isWeighted(){
+        for (Edge e : getAllEdges()){
+            if(e.hasWeight()){
+                return true;
+            }
+        }
+        return false;
+    }
 }
