@@ -1,10 +1,47 @@
 package main;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 
 import main.m1graf2021.*;
 
 public class testProgram{
+
+    public static boolean isSym(String path) throws IOException {
+        BufferedReader reader;
+        try {
+            reader = new BufferedReader(new FileReader(path));
+            String line = reader.readLine();
+            while (line != null) {
+                line = line.trim();
+                if (line.contains("digraph")) {
+                    return false;
+                }
+                if (line.contains("graph")) {
+                    return true;
+                }
+                line = reader.readLine();
+            }
+            reader.close();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static int addWeightMenu() {
+        int selection;
+        Scanner input = new Scanner(System.in);
+
+        /***************************************************/
+        System.out.println("-------------------------\n");
+        System.out.println("Enter the weight of the edge you've added :");
+
+        selection = input.nextInt();
+        return selection;
+    }
 
     public static String enterDotPathWriteMenu() {
         String selection;
@@ -157,9 +194,9 @@ public class testProgram{
         return selection;
     }
 
-    public static void main(String[] args) throws java.io.FileNotFoundException{
+    public static void main(String[] args) throws java.io.FileNotFoundException, java.io.IOException{
+
         Graf g = new Graf();
-        boolean sym = false;
         boolean weighted = false;
         int userChoice=0;
         String stringUserChoice;
@@ -171,18 +208,32 @@ public class testProgram{
 
             if (userChoice == 1) {
                 g = new Graf();
-                stringUserChoice = createEmptyGraphSymmetricMenu();
-                stringUserChoice = createEmptyGraphWeightedMenu();
+                do {
+                    stringUserChoice = createEmptyGraphSymmetricMenu();
+                    if (stringUserChoice.equals("y")) {
+                        g = new UndirectedGraf();
+                    }
+                }while (!stringUserChoice.equals("y") && !stringUserChoice.equals("n"));
+                do {
+                    stringUserChoice = createEmptyGraphWeightedMenu();
+                    if (stringUserChoice.equals("y")) {
+                        weighted = true;
+                    }
+                }while (!stringUserChoice.equals("y") && !stringUserChoice.equals("n"));
             }
 
             if (userChoice == 2) {
                 stringUserChoice=enterDotPathReadMenu();
-                g = new Graf(stringUserChoice);
-                // Vérifier s'il est symétrique
-                // Vérifier s'il est weighted
+                if (isSym(stringUserChoice)){
+                    g = new UndirectedGraf(stringUserChoice);
+                }else {
+                    g = new Graf(stringUserChoice);
+                }
+                if (g.isWeighted()){
+                    weighted=true;
+                }
             }
 
-            //put others too
             if (userChoice == 3 || userChoice == 4 || userChoice == 5 || userChoice == 6 || userChoice == 7 || userChoice == 8 || userChoice == 9 || userChoice == 10 || userChoice == 11 || userChoice == 12) {
                 System.out.println("A graph must have been created. Please create an empty graph or import a graph before making actions.");
             }
@@ -194,15 +245,30 @@ public class testProgram{
             userChoice = menu();
             if (userChoice == 1) {
                 g = new Graf();
-                stringUserChoice = createEmptyGraphSymmetricMenu();
-                stringUserChoice = createEmptyGraphWeightedMenu();
-                if (stringUserChoice.equals("y")){
-                    weighted=true;
-                }
+                stringUserChoice = "z";
+                do{
+                    stringUserChoice = createEmptyGraphSymmetricMenu();
+                    if (stringUserChoice.equals("y")) {
+                        g = new UndirectedGraf();
+                    }
+                }while (!stringUserChoice.equals("y") && !stringUserChoice.equals("n"));
+                do {
+                    stringUserChoice = createEmptyGraphWeightedMenu();
+                    if (stringUserChoice.equals("y")) {
+                        weighted = true;
+                    }
+                }while (!stringUserChoice.equals("y") && !stringUserChoice.equals("n"));
             }
             if (userChoice == 2) {
                 stringUserChoice=enterDotPathReadMenu();
-                g = new Graf(stringUserChoice);
+                if (isSym(stringUserChoice)){
+                    g = new UndirectedGraf(stringUserChoice);
+                }else {
+                    g = new Graf(stringUserChoice);
+                }
+                if (g.isWeighted()){
+                    weighted=true;
+                }
             }
             if (userChoice == 3) {
                 userChoice = addNodeMenu();
@@ -212,9 +278,13 @@ public class testProgram{
                 int userChoiceFrom=addEdgeFromMenu();
                 int userChoiceTo=addEdgeToMenu();
                 g.addEdge(userChoiceFrom,userChoiceTo);
+                if (weighted){
+                    int userChoiceWeight=addWeightMenu();
+                    g.setEdgeWeight(userChoiceFrom,userChoiceTo,userChoiceWeight);
+                }
             }
             if (userChoice == 5) {
-                userChoice=addNodeMenu();
+                userChoice=removeNodeMenu();
                 g.removeNode(userChoice);
             }
             if (userChoice == 6) {
@@ -229,33 +299,24 @@ public class testProgram{
                 stringUserChoice=enterDotPathWriteMenu();
                 g.toDotFile(stringUserChoice);
             }
-
             if (userChoice == 9) {
                 g=g.getReverse();
             }
-
             if (userChoice == 10) {
                 g=g.getTransitiveClosure();
             }
-
             if (userChoice == 11) {
-                List<Node> l = new ArrayList<Node>();
-                l=g.getBFS();
-                if (l.isEmpty()){
+                if (g.getBFS().isEmpty()){
                     continue;
                 }
-                System.out.println(Arrays.toString(l.toArray()));
+                System.out.println(Arrays.toString(g.getBFS().toArray()));
             }
-
             if (userChoice == 12) {
-                List<Node> l = new ArrayList<Node>();
-                l=g.getDFS();
-                if (l.isEmpty()){
+                if (g.getDFS().isEmpty()){
                     continue;
                 }
-                System.out.println(Arrays.toString(l.toArray()));
+                System.out.println(Arrays.toString(g.getDFS().toArray()));
             }
-
             if (userChoice == 13) {
                 return;
             }
