@@ -1,8 +1,8 @@
-package main.m1graf2021;
+package main;
 
-public class Pair<F, S> {
-    private F first; //first member of pair
-    private S second; //second member of pair
+public class Pair<T1, T2> {
+    private T1 first; //first member of pair
+    private T2 second; //second member of pair
 
     /**
      * Creates a pair with two elements of any type
@@ -10,7 +10,7 @@ public class Pair<F, S> {
      * @param first the first element of the pair
      * @param second the second element of the pair
      */
-    public Pair(F first, S second) {
+    public Pair(T1 first, T2 second) {
         this.first = first;
         this.second = second;
     }
@@ -20,7 +20,7 @@ public class Pair<F, S> {
      *
      * @param first the future value of the first element
      */
-    public void setFirst(F first) {
+    public void setFirst(T1 first) {
         this.first = first;
     }
 
@@ -29,7 +29,7 @@ public class Pair<F, S> {
      *
      * @param second the future value of the second element
      */
-    public void setSecond(S second) {
+    public void setSecond(T2 second) {
         this.second = second;
     }
 
@@ -38,7 +38,7 @@ public class Pair<F, S> {
      *
      * @return the value of the first element
      */
-    public F getFirst() {
+    public T1 getFirst() {
         return first;
     }
 
@@ -47,7 +47,7 @@ public class Pair<F, S> {
      *
      * @return the value of the second element
      */
-    public S getSecond() {
+    public T2 getSecond() {
         return second;
     }
 }
