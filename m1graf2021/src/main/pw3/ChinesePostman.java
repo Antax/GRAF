@@ -1,6 +1,9 @@
 package main.pw3;
 import main.m1graf2021.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ChinesePostman {
     private UndirectedGraf graf;
 
@@ -28,5 +31,14 @@ public class ChinesePostman {
 
     public boolean isNonEulerian(){
         return countOddDegreeNodes()>2;
+    }
+
+    public List<Edge> getEulerianTrail(){
+        //Node startingNode = graf.getAllNodes();
+        return getEulerianTrailFromNode();
+    }
+
+    public List<Edge> getEulerianTrailFromNode(/*Node startingNode*/){
+        return new ArrayList<>();
     }
 }
