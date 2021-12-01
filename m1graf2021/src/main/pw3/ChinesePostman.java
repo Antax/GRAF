@@ -10,10 +10,18 @@ public class ChinesePostman {
         this.graf = graf;
     }
 
+    public boolean isOddDegree(Node n){
+        return graf.degree(n)%2 != 0;
+    }
+
+    public boolean isOddDegree(int id){
+        return isOddDegree(new Node(id));
+    }
+
     public int countOddDegreeNodes(){
         int res=0;
         for (Node n : graf.getAllNodes()){
-            if((graf.degree(n))%2 != 0){
+            if(isOddDegree(n)){
                 res++;
             }
         }
@@ -46,7 +54,7 @@ public class ChinesePostman {
             //change priority of nodes
             if(isSemiEulerian()){
                 for (Node n : stackOfNodes){
-                    if (graf.degree(n)%2 != 0){
+                    if (isOddDegree(n)){
                         stackOfNodes.remove(n);
                         stackOfNodes.add(0,n);
                         break;
