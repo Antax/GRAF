@@ -35,9 +35,9 @@ public class ChinesePostman {
     public List<Edge> getEulerianPath(){
         if(!isNonEulerian()){
             List<List<Edge>> subCircuits = new ArrayList<>();
-            Map<Node, List<Edge>> visitedEdges = new HashMap<>();
+            Map<Node, List<Edge>> edgesToVisit = new HashMap<>();
             for (Node n : graf.getAllNodes()){
-                visitedEdges.put(n,new ArrayList<Edge>());
+                edgesToVisit.put(n,graf.getOutEdges(n));
             }
             List<Edge> res=new ArrayList<>();
             List<Node> stackOfNodes = graf.getAllNodes();
@@ -62,17 +62,15 @@ public class ChinesePostman {
                 boolean hasChanged = true;
                 while(hasChanged){
                     hasChanged = false;
-                    for(Edge e : graf.getOutEdges(currentNode)){
-                        if(!visitedEdges.get(currentNode).contains(e)){
-                            visitedEdges.get(currentNode).add(e);
-                            visitedEdges.get(e.to()).add(e.getSymmetric());
-                            newSubCircuit.add(e);
-                            currentNode=e.to();
-                            hasChanged = true;
-                            break;
-                        }
+                    for(Edge e : edgesToVisit.get(currentNode)){
+                        edgesToVisit.get(currentNode).remove(e);
+                        edgesToVisit.get(e.to()).remove(e.getSymmetric());
+                        newSubCircuit.add(e);
+                        currentNode=e.to();
+                        hasChanged = true;
+                        break;
                     }
-                    if(graf.getOutEdges(currentNode).size()==visitedEdges.get(currentNode).size()){
+                    if(edgesToVisit.get(currentNode).size()==0){
                         stackOfNodes.remove(currentNode);
                     }
                 }
