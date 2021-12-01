@@ -1,4 +1,4 @@
-package main;
+package main.m1graf2021;
 
 public class Pair<T1, T2> {
     private T1 first; //first member of pair

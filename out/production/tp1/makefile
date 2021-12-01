@@ -98,4 +98,5 @@ run: $(MAIN).class
 #
 
 clean:
-	$(RM) *.class
+	$(RM) main/*.class
+	$(RM) main/m1graf2021/*.class

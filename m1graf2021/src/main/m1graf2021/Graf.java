@@ -1,13 +1,10 @@
 package main.m1graf2021;
 
-import main.Pair;
-
 import java.io.*;
 import java.util.*;
 
 public class Graf{
     Map<Node, List<Edge>> adjEdList;
-
     /**
      * Creates en empty graph
      */

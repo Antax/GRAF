@@ -1,7 +1,5 @@
 package main.m1graf2021;
 
-import main.Pair;
-
 import java.io.*;
 import java.util.*;
 
