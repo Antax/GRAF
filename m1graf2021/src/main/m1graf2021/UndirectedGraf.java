@@ -262,7 +262,7 @@ public class UndirectedGraf extends Graf{
             res+=";\n";
             if(!weightedEdges.isEmpty()){
                 for (Edge weightedEdge:weightedEdges) {
-                    res+=n.toString()+" -> "+weightedEdge.to().toString()+"[len="+String.valueOf(weightedEdge.weight())+",label="+String.valueOf(weightedEdge.weight())+"];\n";
+                    res+=n.toString()+" -- "+weightedEdge.to().toString()+"[len="+String.valueOf(weightedEdge.weight())+",label="+String.valueOf(weightedEdge.weight())+"];\n";
                 }
             }
         }

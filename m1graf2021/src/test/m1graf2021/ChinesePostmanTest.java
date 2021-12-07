@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Map;
 
 public class ChinesePostmanTest {
     @Test
@@ -58,6 +59,29 @@ public class ChinesePostmanTest {
         List<Edge> res = cp.getEulerianPath();
         System.out.println(res);
         System.out.println(g.toDotString());
+    }
+
+    @Test
+    public void floydWarshall(){
+        UndirectedGraf g = new UndirectedGraf(2,3,4,0,3,4,0,4,0,0);
+        g.setEdgeWeight(1,2,8);
+        g.setEdgeWeight(1,3,6);
+        g.setEdgeWeight(1,4,1);
+
+        g.setEdgeWeight(2,3,1);
+        g.setEdgeWeight(2,4,2);
+
+        g.setEdgeWeight(3,4,9);
+        System.out.println(g.toDotString());
+
+        ChinesePostman cp = new ChinesePostman(g);
+        Map<Pair<Node,Node>, Pair<Integer, Node>> floydWarshallResult = cp.floydWarshall();
+
+        for(int i=1;i<5;++i){
+            for(int j=1;j<5;++j){
+                System.out.println(i+" "+j+" "+cp.lengthOfShortestPathBetween2Nodes(floydWarshallResult,i,j));
+            }
+        }
 
     }
 }

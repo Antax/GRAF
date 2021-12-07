@@ -1,6 +1,8 @@
 package main.m1graf2021;
 
-public class Pair<T1, T2> {
+import java.util.Objects;
+
+public class Pair<T1, T2> implements Comparable<Pair<T1,T2>>{
     private T1 first; //first member of pair
     private T2 second; //second member of pair
 
@@ -10,7 +12,7 @@ public class Pair<T1, T2> {
      * @param first the first element of the pair
      * @param second the second element of the pair
      */
-    public Pair(T1 first, T2 second) {
+    public Pair(T1  first, T2 second) {
         this.first = first;
         this.second = second;
     }
@@ -49,5 +51,27 @@ public class Pair<T1, T2> {
      */
     public T2 getSecond() {
         return second;
+    }
+
+
+    @Override
+    public int compareTo(Pair<T1, T2> o) {
+        if(first.equals(o.getFirst()) && second.equals(o.getSecond())){
+            return 0;
+        }
+        return -1;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Pair<?, ?> pair = (Pair<?, ?>) o;
+        return Objects.equals(first, pair.first) && Objects.equals(second, pair.second);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(first, second);
     }
 }

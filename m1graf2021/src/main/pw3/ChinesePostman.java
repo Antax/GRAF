@@ -153,10 +153,10 @@ public class ChinesePostman {
         return max;
     }
 
-    private Map<Pair<Node,Node>, Pair<Integer, Node>> floydWarshall(){
+    public Map<Pair<Node,Node>, Pair<Integer, Node>> floydWarshall(){
         Integer myInf = Integer.MAX_VALUE;
 
-        int highestnode= getHighestNode();
+        int highestnode= getHighestNode()+1;
         Map<Pair<Node,Node>, Pair<Integer, Node>> res = new HashMap<Pair<Node,Node>, Pair<Integer, Node>>();
 
         // Initialization
@@ -178,9 +178,7 @@ public class ChinesePostman {
                 if (x.equals(y)){
                     M[x.getId()][y.getId()]=0;
                     Prec[x.getId()][y.getId()]=x.getId();
-
                     res.put(new Pair(x,y), new Pair(0,x));
-
                 }else{
                     if (graf.existsEdge(x,y)){
                         M[x.getId()][y.getId()]= graf.getEdge(new Edge(x,y)).weight();
@@ -210,4 +208,36 @@ public class ChinesePostman {
         return res;
     }
 
+    public List<Edge> shortestPathBetween2Nodes(Map<Pair<Node,Node>, Pair<Integer, Node>> floydWarshallResult){
+        List<Edge> res = new ArrayList<Edge>();
+        //todo
+        return res;
+    }
+
+    public int lengthOfShortestPathBetween2Nodes(Map<Pair<Node,Node>, Pair<Integer, Node>> floydWarshallResult, Node first, Node second){
+        return floydWarshallResult.get(new Pair<>(first,second)).getFirst();
+    }
+
+    public Node lengthOfShortestPathBetween2Nodes(Map<Pair<Node,Node>, Pair<Integer, Node>> floydWarshallResult, int first, int second){
+        //return floydWarshallResult.get(new Pair<>(new Node(first),new Node(second))).getFirst();
+        return floydWarshallResult.get(new Pair<>(new Node(first),new Node(second))).getSecond();
+    }
+
+    public List<Pair<Node,Node>> getPairwiseMatchingRandom(Map<Pair<Node,Node>, Pair<Integer, Node>> floydWarshallResult){
+        List<Pair<Node,Node>> res = new ArrayList<Pair<Node,Node>>();
+        //todo
+        return res;
+    }
+
+    public List<Pair<Node,Node>> getPairwiseMatchingNaive(Map<Pair<Node,Node>, Pair<Integer, Node>> floydWarshallResult){
+        List<Pair<Node,Node>> res = new ArrayList<Pair<Node,Node>>();
+        //todo
+        return res;
+    }
+
+    public Graf getEquivalentGraf(List<Pair<Node,Node>> pairwiseMatching, Map<Pair<Node,Node>, Pair<Integer, Node>> floydWarshallResult){
+        Graf g = copyGraf();
+        //todo
+        return g;
+    }
 }
