@@ -107,4 +107,72 @@ public class ChinesePostman {
         }
         return null;
     }
+
+    public int getHighestNode(){
+        int max=0;
+        for(Node e : graf.getAllNodes()){
+            if (e.getId()>max){
+                max=e.getId();
+            }
+        }
+        return max;
+    }
+
+    private Map<Pair<Node,Node>, Pair<Integer, Node>> floydWarshall(){
+        Integer myInf = Integer.MAX_VALUE;
+
+        int highestnode= getHighestNode();
+        Map<Pair<Node,Node>, Pair<Integer, Node>> res = new HashMap<Pair<Node,Node>, Pair<Integer, Node>>();
+
+        // Initialization
+        List<Node> nodes=graf.getAllNodes();
+
+        int[][] M = new int[highestnode][highestnode];
+        int[][] Prec = new int[highestnode][highestnode];
+
+        // Pas obligatoire ?
+        for(int i=0; i<highestnode;i++){
+            for (int j=0; j<highestnode;j++){
+                M[i][j]=0;
+                Prec[i][j]=0;
+            }
+        }
+
+        for(Node x : nodes){
+            for(Node y : nodes){
+                if (x.equals(y)){
+                    M[x.getId()][y.getId()]=0;
+                    Prec[x.getId()][y.getId()]=x.getId();
+
+                    res.put(new Pair(x,y), new Pair(0,x));
+
+                }else{
+                    if (graf.existsEdge(x,y)){
+                        M[x.getId()][y.getId()]= graf.getEdge(new Edge(x,y)).weight();
+                        Prec[x.getId()][y.getId()]=x.getId();
+
+                        res.put(new Pair(x,y), new Pair(M[x.getId()][y.getId()],x));
+
+                    }else{
+                        M[x.getId()][y.getId()] = myInf; //l'infini
+                    }
+                }
+            }
+        }
+        // Shortest distances computation
+        for(Node z : nodes) {
+            for (Node x : nodes) {
+                for (Node y : nodes) {
+                    if (M[x.getId()][z.getId()] != myInf && M[z.getId()][y.getId()] !=myInf && M[x.getId()][z.getId()] + M[z.getId()][y.getId()] < M[x.getId()][y.getId()]) {
+                        M[x.getId()][y.getId()] = M[x.getId()][z.getId()] + M[z.getId()][y.getId()];
+                        Prec[x.getId()][y.getId()]=Prec[z.getId()][y.getId()];
+
+                        res.put(new Pair(x,y), new Pair(M[x.getId()][y.getId()],new Node(Prec[x.getId()][y.getId()])));
+                    }
+                }
+            }
+        }
+        return res;
+    }
+
 }
