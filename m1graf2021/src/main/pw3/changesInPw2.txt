@@ -1,1 +1,3 @@
 to dot string pour les undirected : quand  il y avait un poids, il y avait -> au lieu de -- (Undirected.graf l 265)
+
+undirected graf : setEdgeWeight de l'arrête opposée

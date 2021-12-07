@@ -175,20 +175,26 @@ public class ChinesePostman {
                     if (graf.existsEdge(x,y)){
                         M[x.getId()][y.getId()]= graf.getEdge(new Edge(x,y)).weight();
                         Prec[x.getId()][y.getId()]=x.getId();
-
                         res.put(new Pair(x,y), new Pair(M[x.getId()][y.getId()],x));
 
                     }else{
                         M[x.getId()][y.getId()] = myInf; //l'infini
+                        res.put(new Pair(x,y), new Pair(myInf,null));
                     }
                 }
+            }
+        }
+        for(int i=1; i<highestnode;++i){
+            for(int j=1; j<highestnode;++j){
+                System.out.println(i+" "+j+" length : "+M[i][j]+" previousStep : "+Prec[i][j]);
+                res.put(new Pair(i,j), new Pair(M[i][j],Prec[i][j]));
             }
         }
         // Shortest distances computation
         for(Node z : nodes) {
             for (Node x : nodes) {
                 for (Node y : nodes) {
-                    if (M[x.getId()][z.getId()] != myInf && M[z.getId()][y.getId()] !=myInf && M[x.getId()][z.getId()] + M[z.getId()][y.getId()] < M[x.getId()][y.getId()]) {
+                    if ((M[x.getId()][z.getId()] != myInf) && (M[z.getId()][y.getId()] !=myInf) && ((M[x.getId()][z.getId()] + M[z.getId()][y.getId()]) < M[x.getId()][y.getId()])) {
                         M[x.getId()][y.getId()] = M[x.getId()][z.getId()] + M[z.getId()][y.getId()];
                         Prec[x.getId()][y.getId()]=Prec[z.getId()][y.getId()];
 
@@ -197,6 +203,15 @@ public class ChinesePostman {
                 }
             }
         }
+
+        System.out.println("SUUUUUUU");
+        for(int i=1; i<highestnode;++i){
+            for(int j=1; j<highestnode;++j){
+                System.out.println(i+" "+j+" length : "+M[i][j]+" nextStep : "+Prec[i][j]);
+                res.put(new Pair(i,j), new Pair(M[i][j],Prec[i][j]));
+            }
+        }
+
         return res;
     }
 

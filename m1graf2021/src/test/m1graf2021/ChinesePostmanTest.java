@@ -76,12 +76,5 @@ public class ChinesePostmanTest {
 
         ChinesePostman cp = new ChinesePostman(g);
         Map<Pair<Node,Node>, Pair<Integer, Node>> floydWarshallResult = cp.floydWarshall();
-
-        for(int i=1;i<5;++i){
-            for(int j=1;j<5;++j){
-                System.out.println(i+" "+j+" "+cp.lengthOfShortestPathBetween2Nodes(floydWarshallResult,i,j));
-            }
-        }
-
     }
 }

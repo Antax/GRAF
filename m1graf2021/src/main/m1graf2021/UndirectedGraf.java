@@ -282,14 +282,15 @@ public class UndirectedGraf extends Graf{
 
     public void setEdgeWeight(Edge e,int w){
         super.setEdgeWeight(e,w);
+        super.setEdgeWeight(e.getSymmetric(),w);
     }
 
     public void setEdgeWeight(Node f, Node t, int w){
-        super.setEdgeWeight(f,t,w);
+        this.setEdgeWeight(new Edge(f,t),w);
     }
 
     public void setEdgeWeight(int f,int t, int w){
-        super.setEdgeWeight(f,t,w);
+        this.setEdgeWeight(new Edge(new Node(f),new Node(t)),w);
     }
 
     public int[][] toAdjMatrix(){
