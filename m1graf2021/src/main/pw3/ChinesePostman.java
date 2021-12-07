@@ -1,6 +1,10 @@
 package main.pw3;
 import main.m1graf2021.*;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 
 public class ChinesePostman {
@@ -8,6 +12,38 @@ public class ChinesePostman {
 
     public ChinesePostman(UndirectedGraf graf){
         this.graf = graf;
+    }
+
+    public ChinesePostman(String pathToDotFile) {
+        this.graf = new UndirectedGraf();
+        //not using undirectedGraf's constructor cause it is bugged :/
+        //if the size isn't enough to contain .dot
+        if (pathToDotFile.length() <= 4) {
+            System.out.println("Not a valid file path");
+            return;
+        }
+        //If this isn't a dot file path
+        String pathExtension = pathToDotFile.substring(pathToDotFile.length() - 4);
+        if (!pathExtension.equals(".dot")) {
+            System.out.println(pathExtension + " The file must be a dot file");
+            return;
+        }
+        BufferedReader reader;
+        try {
+            reader = new BufferedReader(new FileReader(pathToDotFile));
+            String line=reader.readLine();
+            while (line != null) {
+                line = reader.readLine();
+                line = line.trim();
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private UndirectedGraf copyGraf(){
+        return new UndirectedGraf(graf.toSuccessorArray());
     }
 
     public boolean isOddDegree(Node n){
@@ -41,14 +77,15 @@ public class ChinesePostman {
     }
 
     public List<Edge> getEulerianPath(){
+        UndirectedGraf copyGraf = copyGraf();
         if(!isNonEulerian()){
             List<List<Edge>> subCircuits = new ArrayList<>();
             Map<Node, List<Edge>> edgesToVisit = new HashMap<>();
-            for (Node n : graf.getAllNodes()){
-                edgesToVisit.put(n,graf.getOutEdges(n));
+            for (Node n : copyGraf.getAllNodes()){
+                edgesToVisit.put(n,copyGraf.getOutEdges(n));
             }
             List<Edge> res=new ArrayList<>();
-            List<Node> stackOfNodes = graf.getAllNodes();
+            List<Node> stackOfNodes = copyGraf.getAllNodes();
             Collections.sort(stackOfNodes);
 
             //change priority of nodes
@@ -61,8 +98,6 @@ public class ChinesePostman {
                     }
                 }
             }
-
-            System.out.println(stackOfNodes);
 
             while(!stackOfNodes.isEmpty()){
                 List<Edge> newSubCircuit = new ArrayList<>();

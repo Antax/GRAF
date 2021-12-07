@@ -57,5 +57,7 @@ public class ChinesePostmanTest {
         ChinesePostman cp = new ChinesePostman(g);
         List<Edge> res = cp.getEulerianPath();
         System.out.println(res);
+        System.out.println(g.toDotString());
+
     }
 }
