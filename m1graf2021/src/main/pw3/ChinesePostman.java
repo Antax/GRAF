@@ -121,7 +121,7 @@ public class ChinesePostman {
     private Map<Pair<Node,Node>, Pair<Integer, Node>> floydWarshall(){
         Integer myInf = Integer.MAX_VALUE;
 
-        int highestnode= getHighestNode();
+        int highestnode= getHighestNode()+1;
         Map<Pair<Node,Node>, Pair<Integer, Node>> res = new HashMap<Pair<Node,Node>, Pair<Integer, Node>>();
 
         // Initialization
@@ -129,14 +129,6 @@ public class ChinesePostman {
 
         int[][] M = new int[highestnode][highestnode];
         int[][] Prec = new int[highestnode][highestnode];
-
-        // Pas obligatoire ?
-        for(int i=0; i<highestnode;i++){
-            for (int j=0; j<highestnode;j++){
-                M[i][j]=0;
-                Prec[i][j]=0;
-            }
-        }
 
         for(Node x : nodes){
             for(Node y : nodes){

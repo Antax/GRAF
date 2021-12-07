@@ -242,19 +242,8 @@ public class testProgram{
 
         System.out.println("Choose from these choices");
         System.out.println("-------------------------\n");
-        System.out.println("1 - Create empty graph");
-        System.out.println("2 - Read a graph from a DOT file");
-        System.out.println("3 - Add a node");
-        System.out.println("4 - Add an edge");
-        System.out.println("5 - Remove a node");
-        System.out.println("6 - Remove an edge");
-        System.out.println("7 - Print on the console the graph in the DOT format");
-        System.out.println("8 - Export the graph to a DOT file");
-        System.out.println("9 - Reverse the graph");
-        System.out.println("10 - Compute the transitive closure of the graph");
-        System.out.println("11 - Traverse the graph in DSF");
-        System.out.println("12 - Traverse the graph in BSF");
-        System.out.println("13 - Quit interactive menu");
+        System.out.println("1 - Read a graph from a DOT file");
+        System.out.println("2 - Quit interactive menu");
 
         selection = input.nextInt();
         return selection;
@@ -273,37 +262,14 @@ public class testProgram{
             userChoice = menu();
 
             if (userChoice == 1) {
-                g = new Graf();
-                do {
-                    stringUserChoice = createEmptyGraphSymmetricMenu();
-                    if (stringUserChoice.equals("y")) {
-                        g = new UndirectedGraf();
-                    }
-                }while (!stringUserChoice.equals("y") && !stringUserChoice.equals("n"));
-                do {
-                    stringUserChoice = createEmptyGraphWeightedMenu();
-                    if (stringUserChoice.equals("y")) {
-                        weighted = true;
-                    }
-                }while (!stringUserChoice.equals("y") && !stringUserChoice.equals("n"));
+                stringUserChoice=enterDotPathReadMenu();
+                g = new UndirectedGraf(stringUserChoice);
+                weighted=true;
+
+                userChoice = addNodeMenu();
             }
 
             if (userChoice == 2) {
-                stringUserChoice=enterDotPathReadMenu();
-                if (isSym(stringUserChoice)){
-                    g = new UndirectedGraf(stringUserChoice);
-                }else {
-                    g = new Graf(stringUserChoice);
-                }
-                if (g.isWeighted()){
-                    weighted=true;
-                }
-            }
-
-            if (userChoice == 3 || userChoice == 4 || userChoice == 5 || userChoice == 6 || userChoice == 7 || userChoice == 8 || userChoice == 9 || userChoice == 10 || userChoice == 11 || userChoice == 12) {
-                System.out.println("A graph must have been created. Please create an empty graph or import a graph before making actions.");
-            }
-            if (userChoice == 13) {
                 return;
             }
         }
@@ -326,15 +292,7 @@ public class testProgram{
                 }while (!stringUserChoice.equals("y") && !stringUserChoice.equals("n"));
             }
             if (userChoice == 2) {
-                stringUserChoice=enterDotPathReadMenu();
-                if (isSym(stringUserChoice)){
-                    g = new UndirectedGraf(stringUserChoice);
-                }else {
-                    g = new Graf(stringUserChoice);
-                }
-                if (g.isWeighted()){
-                    weighted=true;
-                }
+                return;
             }
             if (userChoice == 3) {
                 userChoice = addNodeMenu();
