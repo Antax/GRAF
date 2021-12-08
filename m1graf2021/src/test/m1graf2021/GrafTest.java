@@ -353,7 +353,7 @@ public class GrafTest {
         int[] a={3, 4, 0, 0, 6, 0, 2, 3, 5, 8, 0, 0, 4, 7, 0, 3, 0, 7, 0};
         Graf g=new Graf(a);
         g.toDotFile("\\D:\\M1\\GRAF\\test.dot");
-    }
+    }*/
 
     @Test
     public void testDotToGraph(){
@@ -364,9 +364,12 @@ public class GrafTest {
         Collections.sort(nodesFromDot);
 
 
-        int[] a={2, 4, 0, 0, 6, 0, 2, 3, 5, 8, 0, 0, 4, 7, 0, 3, 0, 7, 0};
+        int[] a={2,3,0,2,3,0};
         Graf expected=new Graf(a);
-        expected.setEdgeWeight(1,4,5);
+        expected.setEdgeWeight(1,2,4);
+        expected.setEdgeWeight(1,3,6);
+        expected.setEdgeWeight(2,2,3);
+        expected.setEdgeWeight(2,3,8);
         List<Edge> edgesExpected=expected.getAllEdges();
         Collections.sort(edgesExpected);
         List<Node> nodesExpected=expected.getAllNodes();
@@ -374,8 +377,8 @@ public class GrafTest {
 
         Assert.assertEquals(edgesExpected,edgesFromDot);
         Assert.assertEquals(nodesExpected,nodesFromDot);
-        Assert.assertEquals(5,graphFromDot.getEdge(new Edge(1,4)).weight());
-    }*/
+        Assert.assertEquals(8,graphFromDot.getEdge(new Edge(2,3)).weight());
+    }
 
     @Test
     public void testToAdjMatrix(){

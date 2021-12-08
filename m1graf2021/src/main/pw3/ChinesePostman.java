@@ -2,9 +2,7 @@ package main.pw3;
 import main.m1graf2021.*;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.*;
 
 public class ChinesePostman {
@@ -276,8 +274,49 @@ public class ChinesePostman {
     }
 
     public List<Pair<Node,Node>> getPairwiseMatchingGreedy(Map<Pair<Node,Node>, Pair<Integer, Node>> floydWarshallResult){
-        List<Pair<Node,Node>> res = new ArrayList<Pair<Node,Node>>();
-        //todo
+        List<Pair<Node,Node>> res = new ArrayList<>();
+        List<Node> oddDegreeNodes = getAllOddDegrees();
+        while(!oddDegreeNodes.isEmpty()){
+            int bestLength = shortestPathBetween2Nodes(floydWarshallResult,oddDegreeNodes.get(0),oddDegreeNodes.get(1)).size();
+            Pair<Node,Node> bestPair = new Pair<>(oddDegreeNodes.get(0),oddDegreeNodes.get(1));
+            for(int i=0;i<oddDegreeNodes.size()-1;++i){
+                for(int j=i+1;j<oddDegreeNodes.size();++j){
+                    if(shortestPathBetween2Nodes(floydWarshallResult,oddDegreeNodes.get(0),oddDegreeNodes.get(1)).size()<bestLength){
+                        bestLength=shortestPathBetween2Nodes(floydWarshallResult,oddDegreeNodes.get(0),oddDegreeNodes.get(1)).size();
+                        bestPair = new Pair<>(oddDegreeNodes.get(0),oddDegreeNodes.get(1));
+                    }
+                }
+            }
+            res.add(bestPair);
+            oddDegreeNodes.remove(bestPair.getFirst());
+            oddDegreeNodes.remove(bestPair.getSecond());
+        }
+        return res;
+    }
+
+    static void allPairs(List<Node> nodes, List<List<Node>> allPairs, int start, int end, int index){
+        if (index == nodes.size()){
+            return;
+        }
+
+        for (int i=start; i<=end && end-i+1 >= nodes.size()-index; i++){
+            allPairs.get(index).add(nodes.get(i));
+            allPairs(nodes, allPairs, i+1, end, index+1);
+        }
+    }
+
+    public List<Pair<Node,Node>> getPairwiseMatchingBestPath(Map<Pair<Node,Node>, Pair<Integer, Node>> floydWarshallResult){
+        List<Pair<Node,Node>> res = new ArrayList<>();
+        List<Pair<Node,Node>> current = new ArrayList<>();
+        List<Node> oddDegreeNodes = getAllOddDegrees();
+        List<List<Node>> allPairs = new ArrayList<>();
+        for(int i=0;i<oddDegreeNodes.size();++i){
+            allPairs.add(i,new ArrayList<>());
+        }
+        allPairs(oddDegreeNodes,allPairs,0,oddDegreeNodes.size()-1,0);
+        for(List<Node> l : allPairs){
+            System.out.println(l);
+        }
         return res;
     }
 
@@ -295,14 +334,16 @@ public class ChinesePostman {
     }
 
     public Pair<UndirectedGraf,List<Edge>> getChinesePostmanSolution(Strategy strategy) {
+        Map<Pair<Node, Node>, Pair<Integer, Node>> floydWarshall = floydWarshall();
         List<Pair<Node,Node>> pairwiseMatching = new ArrayList<>();
         switch (strategy){
             case GREEDY:
+                pairwiseMatching = getPairwiseMatchingGreedy(floydWarshall);
                 break;
             case INORDER:
                 pairwiseMatching = getPairwiseMatchingInOrder();
         }
-        UndirectedGraf resGraf = getEquivalentGraf(pairwiseMatching, floydWarshall());
+        UndirectedGraf resGraf = getEquivalentGraf(pairwiseMatching, floydWarshall);
         return new Pair<>(resGraf,new ChinesePostman(resGraf).getEulerianPath());
     }
 }
