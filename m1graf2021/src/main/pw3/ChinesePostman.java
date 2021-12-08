@@ -151,6 +151,14 @@ public class ChinesePostman {
         return null;
     }
 
+    public int lengthOfPath(List<Edge> path){
+        int res=0;
+        for (Edge e : path){
+            res+=e.weight();
+        }
+        return res;
+    }
+
     public int getHighestNode(){
         int max=0;
         for(Node e : graf.getAllNodes()){
@@ -286,7 +294,7 @@ public class ChinesePostman {
         return g;
     }
 
-    public UndirectedGraf getChinesePostmanSolution(Strategy strategy) {
+    public Pair<UndirectedGraf,List<Edge>> getChinesePostmanSolution(Strategy strategy) {
         List<Pair<Node,Node>> pairwiseMatching = new ArrayList<>();
         switch (strategy){
             case GREEDY:
@@ -294,6 +302,7 @@ public class ChinesePostman {
             case INORDER:
                 pairwiseMatching = getPairwiseMatchingInOrder();
         }
-        return getEquivalentGraf(pairwiseMatching, floydWarshall());
+        UndirectedGraf resGraf = getEquivalentGraf(pairwiseMatching, floydWarshall());
+        return new Pair<>(resGraf,new ChinesePostman(resGraf).getEulerianPath());
     }
 }

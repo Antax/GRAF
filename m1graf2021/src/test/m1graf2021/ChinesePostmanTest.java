@@ -116,6 +116,9 @@ public class ChinesePostmanTest {
         g.setEdgeWeight(8,9,2);
 
         ChinesePostman cp = new ChinesePostman(g);
-        System.out.println(cp.getChinesePostmanSolution(ChinesePostman.Strategy.INORDER).toDotString());
+        Pair<UndirectedGraf,List<Edge>> res = cp.getChinesePostmanSolution(ChinesePostman.Strategy.INORDER);
+        System.out.println(res.getFirst().toDotString());
+        System.out.println(res.getSecond());
+        System.out.println("La longueur est : "+cp.lengthOfPath(res.getSecond()));
     }
 }
