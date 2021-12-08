@@ -135,13 +135,13 @@ public class testProgramPw3{
 
                 if (cp.isEulerian()){
                     System.out.println("This graph is eulerian.\n");
-                    List eulerianpath = cp.getEulerianPath();
+                    List eulerianpath = cp.getEulerianPath(cp.graf);
                     System.out.println(Arrays.toString(eulerianpath.toArray()));
                 }
                 if (cp.isSemiEulerian()){
                     System.out.println("This graph is semi-eulerian.\n");
                     System.out.println("Here is the eulerian path.\n");
-                    List eulerianpath = cp.getEulerianPath();
+                    List eulerianpath = cp.getEulerianPath(cp.graf);
                     System.out.println(Arrays.toString(eulerianpath.toArray()));
                 }
                 if (cp.isNonEulerian()){

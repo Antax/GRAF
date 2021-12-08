@@ -10,7 +10,7 @@ public class ChinesePostman {
         INORDER, GREEDY
     }
 
-    private UndirectedGraf graf;
+    public UndirectedGraf graf;
 
     public ChinesePostman(UndirectedGraf graf){
         this.graf = graf;
@@ -44,10 +44,13 @@ public class ChinesePostman {
         }
     }
 
-    private UndirectedGraf copyGraf(){
-        UndirectedGraf g = new UndirectedGraf(graf.toSuccessorArray());
-        for (Edge e : graf.getAllEdges()){
-            g.setEdgeWeight(e,e.weight());
+    public UndirectedGraf copyGraf(UndirectedGraf original){
+        UndirectedGraf g = new UndirectedGraf();
+        for (Node n : original.getAllNodes()){
+            g.addNode(n.getId());
+        }
+        for (Edge e : original.getAllEdges()){
+            g.addEdge(e.from().getId(),e.to().getId(),e.weight());
         }
         return g;
     }
@@ -82,8 +85,8 @@ public class ChinesePostman {
         return countOddDegreeNodes()>2;
     }
 
-    public List<Edge> getEulerianPath(){
-        UndirectedGraf copyGraf = copyGraf();
+    public List<Edge> getEulerianPath(UndirectedGraf g){
+        UndirectedGraf copyGraf = copyGraf(g);
         if(!isNonEulerian()){
             List<List<Edge>> subCircuits = new ArrayList<>();
             Map<Node, List<Edge>> edgesToVisit = new HashMap<>();
@@ -321,7 +324,7 @@ public class ChinesePostman {
     }
 
     public UndirectedGraf getEquivalentGraf(List<Pair<Node,Node>> pairwiseMatching, Map<Pair<Node,Node>, Pair<Integer, Node>> floydWarshallResult){
-        UndirectedGraf g = copyGraf();
+        UndirectedGraf g = copyGraf(graf);
         for(Pair<Node,Node> pair : pairwiseMatching){
             List<Edge> edgesToAdd = shortestPathBetween2Nodes(floydWarshallResult,pair.getFirst(),pair.getSecond());
             for (Edge toAdd : edgesToAdd){
@@ -344,6 +347,8 @@ public class ChinesePostman {
                 pairwiseMatching = getPairwiseMatchingInOrder();
         }
         UndirectedGraf resGraf = getEquivalentGraf(pairwiseMatching, floydWarshall);
-        return new Pair<>(resGraf,new ChinesePostman(resGraf).getEulerianPath());
+        System.out.println(resGraf.getEdge(new Edge(4,1)));
+
+        return new Pair<>(resGraf,getEulerianPath(resGraf));
     }
 }
