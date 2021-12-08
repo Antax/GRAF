@@ -191,11 +191,11 @@ public class ChinesePostman {
                     if (graf.existsEdge(x,y)){
                         M[x.getId()][y.getId()]= graf.getEdge(new Edge(x,y)).weight();
                         Prec[x.getId()][y.getId()]=x.getId();
+
                         res.put(new Pair(x,y), new Pair(M[x.getId()][y.getId()],x));
 
                     }else{
                         M[x.getId()][y.getId()] = myInf; //l'infini
-                        res.put(new Pair(x,y), new Pair(myInf,null));
                     }
                 }
             }
@@ -209,7 +209,7 @@ public class ChinesePostman {
         for(Node z : nodes) {
             for (Node x : nodes) {
                 for (Node y : nodes) {
-                    if ((M[x.getId()][z.getId()] != myInf) && (M[z.getId()][y.getId()] !=myInf) && ((M[x.getId()][z.getId()] + M[z.getId()][y.getId()]) < M[x.getId()][y.getId()])) {
+                    if (M[x.getId()][z.getId()] != myInf && M[z.getId()][y.getId()] !=myInf && M[x.getId()][z.getId()] + M[z.getId()][y.getId()] < M[x.getId()][y.getId()]) {
                         M[x.getId()][y.getId()] = M[x.getId()][z.getId()] + M[z.getId()][y.getId()];
                         Prec[x.getId()][y.getId()]=Prec[z.getId()][y.getId()];
 

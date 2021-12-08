@@ -147,6 +147,13 @@ public class testProgramPw3{
                 if (cp.isNonEulerian()){
                     System.out.println("This graph is non-eulerian.\n");
                     userChoice = choseStrategyMenu();
+
+                    if (userChoice==2){
+                        List list= cp.getChinesePostmanSolution(ChinesePostman.Strategy.GREEDY).getSecond();
+                        System.out.println(Arrays.toString(list.toArray()));
+                        String stringUserChoice2=enterDotPathWriteMenu();
+                        g.toDotFile(stringUserChoice2);
+                    }
                 }
             }
 
