@@ -126,7 +126,6 @@ public class testProgramPw3{
             if (userChoice == 1) {
                 stringUserChoice=enterDotPathReadMenu();
 
-                System.out.println(stringUserChoice);
                 g = new UndirectedGraf(stringUserChoice);
 
                 if (g.getAllNodes().isEmpty()){
@@ -156,12 +155,12 @@ public class testProgramPw3{
                     if (userChoice==2){
 
                         System.out.println("After adding extra edges, here is the eulerian path :\n");
-                        Pair<UndirectedGraf,List<Edge>> res = (Pair<UndirectedGraf, List<Edge>>) cp.getChinesePostmanSolution(ChinesePostman.Strategy.INORDER).getSecond();
+
                         List list= cp.getChinesePostmanSolution(ChinesePostman.Strategy.INORDER).getSecond();
                         System.out.println(Arrays.toString(list.toArray()));
 
                         String stringUserChoice2=enterDotPathWriteMenu();
-                        res.getFirst().toDotFile(stringUserChoice2);
+                        cp.getChinesePostmanSolution(ChinesePostman.Strategy.INORDER).getFirst().toDotFile(stringUserChoice2);
                     }
                 }
             }
