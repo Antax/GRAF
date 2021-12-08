@@ -84,7 +84,8 @@ public class testProgramPw3{
         System.out.println("Choose the strategy you want to use to compute Chinese-Postman Problem :");
         System.out.println("-------------------------\n");
         System.out.println("1 - Optimal strategy");
-        System.out.println("2 - Random strategy");
+        System.out.println("2 - In-Order strategy");
+        System.out.println("3 - Greedy strategy");
 
         selection = input.nextInt();
         return selection;
@@ -129,6 +130,7 @@ public class testProgramPw3{
                 g = new UndirectedGraf(stringUserChoice);
 
                 if (g.getAllNodes().isEmpty()){
+                    System.out.println("Invalid File.\n");
                     return;
                 }
 
@@ -138,19 +140,30 @@ public class testProgramPw3{
                     System.out.println("This graph is eulerian.\n");
 
                     System.out.println("The eulerian path is :\n");
-                    List eulerianpath = cp.getEulerianPath();
+                    List eulerianpath = cp.getEulerianPath(cp.graf);
                     System.out.println(Arrays.toString(eulerianpath.toArray()));
                 }
                 if (cp.isSemiEulerian()){
                     System.out.println("This graph is semi-eulerian.\n");
 
                     System.out.println("The eulerian path is :\n");
-                    List eulerianpath = cp.getEulerianPath();
+                    List eulerianpath = cp.getEulerianPath(cp.graf);
                     System.out.println(Arrays.toString(eulerianpath.toArray()));
                 }
                 if (cp.isNonEulerian()){
                     System.out.println("This graph is non-eulerian.\n");
                     userChoice = choseStrategyMenu();
+
+                    if (userChoice==1){
+
+                        System.out.println("After adding extra edges, here is the eulerian path :\n");
+
+                        List list= cp.getChinesePostmanSolution(ChinesePostman.Strategy.OPTIMAL).getSecond();
+                        System.out.println(Arrays.toString(list.toArray()));
+
+                        String stringUserChoice2=enterDotPathWriteMenu();
+                        cp.getChinesePostmanSolution(ChinesePostman.Strategy.OPTIMAL).getFirst().toDotFile(stringUserChoice2);
+                    }
 
                     if (userChoice==2){
 
@@ -162,14 +175,22 @@ public class testProgramPw3{
                         String stringUserChoice2=enterDotPathWriteMenu();
                         cp.getChinesePostmanSolution(ChinesePostman.Strategy.INORDER).getFirst().toDotFile(stringUserChoice2);
                     }
+
+                    if (userChoice==3){
+
+                        System.out.println("After adding extra edges, here is the eulerian path :\n");
+
+                        List list= cp.getChinesePostmanSolution(ChinesePostman.Strategy.GREEDY).getSecond();
+                        System.out.println(Arrays.toString(list.toArray()));
+
+                        String stringUserChoice2=enterDotPathWriteMenu();
+                        cp.getChinesePostmanSolution(ChinesePostman.Strategy.GREEDY).getFirst().toDotFile(stringUserChoice2);
+                    }
                 }
             }
-
             if (userChoice == 2) {
                 return;
             }
         }
     }
-
-
 }
