@@ -43,7 +43,11 @@ public class ChinesePostman {
     }
 
     private UndirectedGraf copyGraf(){
-        return new UndirectedGraf(graf.toSuccessorArray());
+        UndirectedGraf g = new UndirectedGraf(graf.toSuccessorArray());
+        for (Edge e : graf.getAllEdges()){
+            g.setEdgeWeight(e,e.weight());
+        }
+        return g;
     }
 
     public boolean isOddDegree(Node n){
@@ -228,7 +232,9 @@ public class ChinesePostman {
         Node previous = floydWarshallResult.get(new Pair<>(first,current)).getSecond();
 
         while(!current.equals(first)){
-            res.add(graf.getEdge(new Edge(previous,current)));
+            Edge e = graf.getEdge(new Edge(previous,current));
+            e.setWeight(graf.getEdge(e).weight());
+            res.add(e);
             current = previous;
             previous = floydWarshallResult.get(new Pair<>(first,current)).getSecond();
         }
@@ -263,9 +269,17 @@ public class ChinesePostman {
         return res;
     }
 
-    public Graf getEquivalentGraf(List<Pair<Node,Node>> pairwiseMatching, Map<Pair<Node,Node>, Pair<Integer, Node>> floydWarshallResult){
-        Graf g = copyGraf();
-        //todo
+    public UndirectedGraf getEquivalentGraf(List<Pair<Node,Node>> pairwiseMatching, Map<Pair<Node,Node>, Pair<Integer, Node>> floydWarshallResult){
+        UndirectedGraf g = copyGraf();
+        for(Pair<Node,Node> pair : pairwiseMatching){
+            List<Edge> edgesToAdd = shortestPathBetween2Nodes(floydWarshallResult,pair.getFirst(),pair.getSecond());
+            for (Edge toAdd : edgesToAdd){
+                Edge e = new Edge(toAdd.from(), toAdd.to());
+                e.setWeight(graf.getEdge(e).weight());
+                System.out.println("ADDDING : "+ e);
+                g.addEdge(e);
+            }
+        }
         return g;
     }
 }

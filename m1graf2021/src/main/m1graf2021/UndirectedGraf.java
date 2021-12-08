@@ -31,12 +31,39 @@ public class UndirectedGraf extends Graf{
         }
     }
 
+    public Edge getLastInsertedEdge(Edge e){
+        if(!existsNode(e.from())||!existsNode(e.to())){
+            return null;
+        }
+        Edge researched=new Edge(e.from(),e.to());
+        Edge returned = null;
+        for(int i=0;i<adjEdList.get(e.from()).size();++i){
+            if(adjEdList.get(e.from()).get(i).equals(researched)){
+                returned =  adjEdList.get(e.from()).get(i);
+            }
+        }
+        return returned;
+    }
+
+    void addEdge(Node from, Node to, int weight){
+        super.addEdge(from,to);
+        getLastInsertedEdge(new Edge(from,to)).setWeight(weight);
+        if(!from.equals(to)){
+            super.addEdge(to,from);
+            getLastInsertedEdge(new Edge(to,from)).setWeight(weight);
+        }
+    }
+
     public void addEdge(int from, int to){
         addEdge(new Node(from),new Node(to));
     }
 
+    public void addEdge(int from, int to, int weight){
+        addEdge(new Node(from),new Node(to), weight);
+    }
+
     public void addEdge(Edge edge){
-        addEdge(edge.from(),edge.to());
+        addEdge(edge.from(),edge.to(),edge.weight());
     }
 
     /**

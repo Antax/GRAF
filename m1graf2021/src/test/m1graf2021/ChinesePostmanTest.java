@@ -113,9 +113,12 @@ public class ChinesePostmanTest {
         g.setEdgeWeight(7,8,2);
 
         g.addEdge(8,9);
-        g.setEdgeWeight(8,2,2);
+        g.setEdgeWeight(8,9,2);
 
         ChinesePostman cp = new ChinesePostman(g);
         List<Pair<Node,Node>> pairwiseMatching = cp.getPairwiseMatchingRandom();
+
+        UndirectedGraf resultAfterPairwiseMatching = cp.getEquivalentGraf(pairwiseMatching, cp.floydWarshall());
+        System.out.println(resultAfterPairwiseMatching.toDotString());
     }
 }
