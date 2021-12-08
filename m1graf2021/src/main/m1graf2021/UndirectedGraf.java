@@ -24,7 +24,7 @@ public class UndirectedGraf extends Graf{
         return super.nbNodes();
     }
 
-    void addEdge(Node from, Node to){
+    public void addEdge(Node from, Node to){
         super.addEdge(from,to);
         if(!from.equals(to)){
             super.addEdge(to,from);
@@ -45,7 +45,7 @@ public class UndirectedGraf extends Graf{
         return returned;
     }
 
-    void addEdge(Node from, Node to, int weight){
+    public void addEdge(Node from, Node to, int weight){
         super.addEdge(from,to);
         getLastInsertedEdge(new Edge(from,to)).setWeight(weight);
         if(!from.equals(to)){
