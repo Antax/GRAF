@@ -125,6 +125,8 @@ public class testProgramPw3{
 
             if (userChoice == 1) {
                 stringUserChoice=enterDotPathReadMenu();
+
+                System.out.println(stringUserChoice);
                 g = new UndirectedGraf(stringUserChoice);
 
                 if (g.getAllNodes().isEmpty()){
@@ -135,12 +137,15 @@ public class testProgramPw3{
 
                 if (cp.isEulerian()){
                     System.out.println("This graph is eulerian.\n");
+
+                    System.out.println("The eulerian path is :\n");
                     List eulerianpath = cp.getEulerianPath();
                     System.out.println(Arrays.toString(eulerianpath.toArray()));
                 }
                 if (cp.isSemiEulerian()){
                     System.out.println("This graph is semi-eulerian.\n");
-                    System.out.println("Here is the eulerian path.\n");
+
+                    System.out.println("The eulerian path is :\n");
                     List eulerianpath = cp.getEulerianPath();
                     System.out.println(Arrays.toString(eulerianpath.toArray()));
                 }
@@ -149,10 +154,14 @@ public class testProgramPw3{
                     userChoice = choseStrategyMenu();
 
                     if (userChoice==2){
-                        List list= cp.getChinesePostmanSolution(ChinesePostman.Strategy.GREEDY).getSecond();
+
+                        System.out.println("After adding extra edges, here is the eulerian path :\n");
+                        Pair<UndirectedGraf,List<Edge>> res = (Pair<UndirectedGraf, List<Edge>>) cp.getChinesePostmanSolution(ChinesePostman.Strategy.INORDER).getSecond();
+                        List list= cp.getChinesePostmanSolution(ChinesePostman.Strategy.INORDER).getSecond();
                         System.out.println(Arrays.toString(list.toArray()));
+
                         String stringUserChoice2=enterDotPathWriteMenu();
-                        g.toDotFile(stringUserChoice2);
+                        res.getFirst().toDotFile(stringUserChoice2);
                     }
                 }
             }
