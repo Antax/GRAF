@@ -7,7 +7,7 @@ import java.util.*;
 
 public class ChinesePostman {
     public enum Strategy{
-        INORDER, GREEDY
+        INORDER, GREEDY, OPTIMAL
     }
 
     public UndirectedGraf graf;
@@ -335,31 +335,65 @@ public class ChinesePostman {
             oddDegreeNodes.remove(bestPair.getFirst());
             oddDegreeNodes.remove(bestPair.getSecond());
         }
-        System.out.println("["+res.get(0).getFirst()+"-"+res.get(0).getSecond()+"] ["+res.get(1).getFirst()+"-"+res.get(1).getSecond()+"]");
         return res;
     }
 
-    static void allPairs(List<Node> nodes, List<List<Node>> allPairs, int start, int end, int index){
-        if (index == nodes.size()){
-            return;
-        }
+    static List<List<Node>> permute(List<Node> nodes){
+        List<List<Node>> set = new ArrayList<List<Node>>();
 
-        for (int i=start; i<=end && end-i+1 >= nodes.size()-index; i++){
-            allPairs.get(index).add(nodes.get(i));
-            allPairs(nodes, allPairs, i+1, end, index+1);
+        if (nodes.size() == 1){
+            set.add(nodes);
+        }else {
+            // Give each character a chance to be the first in the permuted string
+            for (int i = 0; i < nodes.size(); ++i) {
+                List<Node> remaining = new ArrayList<>(nodes.subList(0, i));
+                List<Node> post = new ArrayList<>(nodes.subList(i + 1, nodes.size()));
+                remaining.addAll(post);
+
+                // Recurse to find all the permutations of the remaining chars
+                for (List<Node> permutation : permute(remaining)) {
+                    // Concatenate the first character with the permutations of the remaining chars
+                    List<Node> toAdd = new ArrayList<>();
+                    toAdd.add(nodes.get(i));
+                    toAdd.addAll(permutation);
+                    set.add(toAdd);
+                }
+
+            }
         }
+        return set;
     }
 
     public List<Pair<Node,Node>> getPairwiseMatchingBestPath(Map<Pair<Node,Node>, Pair<Integer, Node>> floydWarshallResult){
-        List<Pair<Node,Node>> res = new ArrayList<>();
-        List<Pair<Node,Node>> current = new ArrayList<>();
+        List<Pair<Node,Node>> bestPairs = new ArrayList<>();
+        int bestLength = -1;
         List<Node> oddDegreeNodes = getAllOddDegrees();
-        List<List<Node>> allPairs = new ArrayList<>();
-        for(int i=0;i<oddDegreeNodes.size();++i){
-            allPairs.add(i,new ArrayList<>());
+        List<List<Node>> allPairs = permute(oddDegreeNodes);
+
+        for(int j=0; j<allPairs.size();++j){
+            List<Node> ln = allPairs.get(j);
+            for (int i=0; i<oddDegreeNodes.size(); i+=2){
+                if(ln.get(i).getId()>ln.get(i+1).getId()){
+                    allPairs.remove(ln);
+                }
+            }
         }
-        allPairs(oddDegreeNodes,allPairs,0,oddDegreeNodes.size()-1,0);
-        return res;
+
+        for(List<Node> ln : allPairs){
+            List<Pair<Node,Node>> current = new ArrayList<>();
+            for (int i=0; i<oddDegreeNodes.size(); i+=2){
+                current.add(new Pair<>(ln.get(i),ln.get(i+1)));
+            }
+            int currentLength = 0;
+            for(Pair<Node,Node> pair : current){
+                currentLength+=lengthOfShortestPathBetween2Nodes(floydWarshallResult,pair.getFirst(),pair.getSecond());
+            }
+            if(bestLength==-1 || currentLength<bestLength){
+                bestPairs = current;
+                bestLength = currentLength;
+            }
+        }
+        return bestPairs;
     }
 
     public UndirectedGraf getEquivalentGraf(List<Pair<Node,Node>> pairwiseMatching, Map<Pair<Node,Node>, Pair<Integer, Node>> floydWarshallResult){
@@ -381,6 +415,8 @@ public class ChinesePostman {
                 break;
             case INORDER:
                 pairwiseMatching = getPairwiseMatchingInOrder();
+            case OPTIMAL:
+                pairwiseMatching = getPairwiseMatchingBestPath(floydWarshall);
         }
         UndirectedGraf resGraf = getEquivalentGraf(pairwiseMatching, floydWarshall);
         return new Pair<>(resGraf,getEulerianPath(resGraf));

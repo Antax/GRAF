@@ -133,4 +133,34 @@ public class ChinesePostmanTest {
         ChinesePostman cp = new ChinesePostman(g);
         Pair<UndirectedGraf,List<Edge>> res = cp.getChinesePostmanSolution(ChinesePostman.Strategy.GREEDY);
     }
+
+    @Test
+    public void pairwiseMatchingBestPath(){
+        UndirectedGraf g = new UndirectedGraf();
+        g.addEdge(1,6,1);
+        g.addEdge(1,4,2);
+
+        g.addEdge(6,3,3);
+        g.addEdge(6,5,8);
+
+        g.addEdge(3,2,2);
+
+        g.addEdge(4,5,6);
+        g.addEdge(4,7,4);
+
+        g.addEdge(5,2,5);
+        g.addEdge(5,8,8);
+
+        g.addEdge(2,9,2);
+
+        g.addEdge(7,8,2);
+
+        g.addEdge(8,9,2);
+        System.out.println(g.toDotString());
+
+        ChinesePostman cp = new ChinesePostman(g);
+        Pair<UndirectedGraf,List<Edge>> res = cp.getChinesePostmanSolution(ChinesePostman.Strategy.OPTIMAL);
+        System.out.println(res.getFirst().toDotString());
+        System.out.println(res.getSecond());
+    }
 }
