@@ -63,6 +63,14 @@ public class ChinesePostman {
         return isOddDegree(new Node(id));
     }
 
+    public boolean isOddDegree(UndirectedGraf g,Node n){
+        return g.degree(n)%2 != 0;
+    }
+
+    public boolean isOddDegree(UndirectedGraf g,int id){
+        return isOddDegree(g,new Node(id));
+    }
+
     public int countOddDegreeNodes(){
         int res=0;
         for (Node n : graf.getAllNodes()){
@@ -73,21 +81,43 @@ public class ChinesePostman {
         return res;
     }
 
+    public int countOddDegreeNodes(UndirectedGraf g){
+        int res=0;
+        for (Node n : g.getAllNodes()){
+            if(isOddDegree(g,n)){
+                res++;
+            }
+        }
+        return res;
+    }
+
+    public boolean isEulerian(UndirectedGraf g){
+        return countOddDegreeNodes(g)==0;
+    }
     public boolean isEulerian(){
-        return countOddDegreeNodes()==0;
+        return countOddDegreeNodes(graf)==0;
+    }
+
+    public boolean isSemiEulerian(UndirectedGraf g){
+        return countOddDegreeNodes(g)==2;
     }
 
     public boolean isSemiEulerian(){
-        return countOddDegreeNodes()==2;
+        return countOddDegreeNodes(graf)==2;
+    }
+
+    public boolean isNonEulerian(UndirectedGraf g){
+        return countOddDegreeNodes(g)>2;
     }
 
     public boolean isNonEulerian(){
-        return countOddDegreeNodes()>2;
+        return countOddDegreeNodes(graf)>2;
     }
 
     public List<Edge> getEulerianPath(UndirectedGraf g){
         UndirectedGraf copyGraf = copyGraf(g);
-        if(!isNonEulerian()){
+        if(!isNonEulerian(copyGraf)){
+            List<Node> visitedNodes = new ArrayList<>();
             List<List<Edge>> subCircuits = new ArrayList<>();
             Map<Node, List<Edge>> edgesToVisit = new HashMap<>();
             for (Node n : copyGraf.getAllNodes()){
@@ -98,7 +128,7 @@ public class ChinesePostman {
             Collections.sort(stackOfNodes);
 
             //change priority of nodes
-            if(isSemiEulerian()){
+            if(isSemiEulerian(copyGraf)){
                 for (Node n : stackOfNodes){
                     if (isOddDegree(n)){
                         stackOfNodes.remove(n);
@@ -110,7 +140,17 @@ public class ChinesePostman {
 
             while(!stackOfNodes.isEmpty()){
                 List<Edge> newSubCircuit = new ArrayList<>();
-                Node currentNode = stackOfNodes.get(0);
+                Node currentNode = new Node(-1);
+                if(subCircuits.size()!=0){
+                    int i=0;
+                    while(!visitedNodes.contains(stackOfNodes.get(i))){
+                        ++i;
+                    }
+                    currentNode=stackOfNodes.get(i);
+                }else{
+                    currentNode = stackOfNodes.get(0);
+                    visitedNodes.add(currentNode);
+                }
                 boolean hasChanged = true;
                 while(hasChanged){
                     hasChanged = false;
@@ -119,6 +159,7 @@ public class ChinesePostman {
                         edgesToVisit.get(e.to()).remove(e.getSymmetric());
                         newSubCircuit.add(e);
                         currentNode=e.to();
+                        visitedNodes.add(currentNode);
                         hasChanged = true;
                         break;
                     }
@@ -280,13 +321,13 @@ public class ChinesePostman {
         List<Pair<Node,Node>> res = new ArrayList<>();
         List<Node> oddDegreeNodes = getAllOddDegrees();
         while(!oddDegreeNodes.isEmpty()){
-            int bestLength = shortestPathBetween2Nodes(floydWarshallResult,oddDegreeNodes.get(0),oddDegreeNodes.get(1)).size();
+            int bestLength = lengthOfShortestPathBetween2Nodes(floydWarshallResult,oddDegreeNodes.get(0),oddDegreeNodes.get(1));
             Pair<Node,Node> bestPair = new Pair<>(oddDegreeNodes.get(0),oddDegreeNodes.get(1));
             for(int i=0;i<oddDegreeNodes.size()-1;++i){
                 for(int j=i+1;j<oddDegreeNodes.size();++j){
-                    if(shortestPathBetween2Nodes(floydWarshallResult,oddDegreeNodes.get(0),oddDegreeNodes.get(1)).size()<bestLength){
-                        bestLength=shortestPathBetween2Nodes(floydWarshallResult,oddDegreeNodes.get(0),oddDegreeNodes.get(1)).size();
-                        bestPair = new Pair<>(oddDegreeNodes.get(0),oddDegreeNodes.get(1));
+                    if(lengthOfShortestPathBetween2Nodes(floydWarshallResult,oddDegreeNodes.get(i),oddDegreeNodes.get(j))<bestLength){
+                        bestLength=lengthOfShortestPathBetween2Nodes(floydWarshallResult,oddDegreeNodes.get(i),oddDegreeNodes.get(j));
+                        bestPair = new Pair<>(oddDegreeNodes.get(i),oddDegreeNodes.get(j));
                     }
                 }
             }
@@ -294,6 +335,7 @@ public class ChinesePostman {
             oddDegreeNodes.remove(bestPair.getFirst());
             oddDegreeNodes.remove(bestPair.getSecond());
         }
+        System.out.println("["+res.get(0).getFirst()+"-"+res.get(0).getSecond()+"] ["+res.get(1).getFirst()+"-"+res.get(1).getSecond()+"]");
         return res;
     }
 
@@ -317,21 +359,15 @@ public class ChinesePostman {
             allPairs.add(i,new ArrayList<>());
         }
         allPairs(oddDegreeNodes,allPairs,0,oddDegreeNodes.size()-1,0);
-        for(List<Node> l : allPairs){
-            System.out.println(l);
-        }
         return res;
     }
 
     public UndirectedGraf getEquivalentGraf(List<Pair<Node,Node>> pairwiseMatching, Map<Pair<Node,Node>, Pair<Integer, Node>> floydWarshallResult){
         UndirectedGraf g = copyGraf(graf);
         for(Pair<Node,Node> pair : pairwiseMatching){
-            List<Edge> edgesToAdd = shortestPathBetween2Nodes(floydWarshallResult,pair.getFirst(),pair.getSecond());
-            for (Edge toAdd : edgesToAdd){
-                Edge e = new Edge(toAdd.from(), toAdd.to());
-                e.setWeight(graf.getEdge(e).weight());
-                g.addEdge(e);
-            }
+            Edge e = new Edge(pair.getFirst(), pair.getSecond());
+            e.setWeight(lengthOfShortestPathBetween2Nodes(floydWarshallResult,pair.getFirst(),pair.getSecond()));
+            g.addEdge(e);
         }
         return g;
     }
@@ -347,8 +383,6 @@ public class ChinesePostman {
                 pairwiseMatching = getPairwiseMatchingInOrder();
         }
         UndirectedGraf resGraf = getEquivalentGraf(pairwiseMatching, floydWarshall);
-        System.out.println(resGraf.getEdge(new Edge(4,1)));
-
         return new Pair<>(resGraf,getEulerianPath(resGraf));
     }
 }

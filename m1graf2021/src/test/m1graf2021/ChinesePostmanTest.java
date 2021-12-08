@@ -83,116 +83,54 @@ public class ChinesePostmanTest {
     @Test
     public void pairwiseMatchingInOrder(){
         UndirectedGraf g = new UndirectedGraf();
-        g.addEdge(1,2);
-        g.setEdgeWeight(1,2,1);
-        g.addEdge(1,4);
-        g.setEdgeWeight(1,4,2);
+        g.addEdge(1,6,1);
+        g.addEdge(1,4,2);
 
-        g.addEdge(2,3);
-        g.setEdgeWeight(2,3,3);
-        g.addEdge(2,5);
-        g.setEdgeWeight(2,5,8);
+        g.addEdge(6,3,3);
+        g.addEdge(6,5,8);
 
-        g.addEdge(3,6);
-        g.setEdgeWeight(3,6,2);
+        g.addEdge(3,2,2);
 
-        g.addEdge(4,5);
-        g.setEdgeWeight(4,5,6);
-        g.addEdge(4,7);
-        g.setEdgeWeight(4,7,4);
+        g.addEdge(4,5,6);
+        g.addEdge(4,7,4);
 
-        g.addEdge(5,6);
-        g.setEdgeWeight(5,6,5);
-        g.addEdge(5,8);
-        g.setEdgeWeight(5,8,6);
+        g.addEdge(5,2,5);
+        g.addEdge(5,8,8);
 
-        g.addEdge(6,9);
-        g.setEdgeWeight(6,9,2);
+        g.addEdge(2,9,2);
 
-        g.addEdge(7,8);
-        g.setEdgeWeight(7,8,2);
+        g.addEdge(7,8,2);
 
-        g.addEdge(8,9);
-        g.setEdgeWeight(8,9,2);
-        System.out.println(g.toDotString());
+        g.addEdge(8,9,2);
 
         ChinesePostman cp = new ChinesePostman(g);
         Pair<UndirectedGraf,List<Edge>> res = cp.getChinesePostmanSolution(ChinesePostman.Strategy.INORDER);
-        System.out.println(res.getFirst().toDotString());
-        System.out.println(res.getSecond());
-        System.out.println("La longueur est : "+cp.lengthOfPath(res.getSecond()));
     }
 
     @Test
     public void pairwiseMatchingGreedy(){
         UndirectedGraf g = new UndirectedGraf();
-        g.addEdge(1,2);
-        g.setEdgeWeight(1,2,1);
-        g.addEdge(1,4);
-        g.setEdgeWeight(1,4,2);
-
-        g.addEdge(2,3);
-        g.setEdgeWeight(2,3,3);
-        g.addEdge(2,5);
-        g.setEdgeWeight(2,5,8);
-
-        g.addEdge(3,6);
-        g.setEdgeWeight(3,6,2);
-
-        g.addEdge(4,5);
-        g.setEdgeWeight(4,5,6);
-        g.addEdge(4,7);
-        g.setEdgeWeight(4,7,4);
-
-        g.addEdge(5,6);
-        g.setEdgeWeight(5,6,5);
-        g.addEdge(5,8);
-        g.setEdgeWeight(5,8,6);
-
-        g.addEdge(6,9);
-        g.setEdgeWeight(6,9,2);
-
-        g.addEdge(7,8);
-        g.setEdgeWeight(7,8,2);
-
-        g.addEdge(8,9);
-        g.setEdgeWeight(8,9,2);
-        System.out.println(g.toDotString());
-
-        ChinesePostman cp = new ChinesePostman(g);
-        Pair<UndirectedGraf,List<Edge>> res = cp.getChinesePostmanSolution(ChinesePostman.Strategy.INORDER);
-        System.out.println(res.getFirst().toDotString());
-        System.out.println(res.getSecond());
-        System.out.println("La longueur est : "+cp.lengthOfPath(res.getSecond()));
-    }
-
-    @Test
-    public void testCopyGraf(){
-        UndirectedGraf g = new UndirectedGraf();
-        g.addEdge(1,2,1);
-        g.addEdge(1,2,1);
+        g.addEdge(1,6,1);
         g.addEdge(1,4,2);
 
-        g.addEdge(2,3,3);
-        g.addEdge(2,5,8);
+        g.addEdge(6,3,3);
+        g.addEdge(6,5,8);
 
-        g.addEdge(3,6,2);
+        g.addEdge(3,2,2);
 
         g.addEdge(4,5,6);
         g.addEdge(4,7,4);
 
-        g.addEdge(5,6,5);
+        g.addEdge(5,2,5);
         g.addEdge(5,8,8);
 
-        g.addEdge(6,9,2);
+        g.addEdge(2,9,2);
 
         g.addEdge(7,8,2);
 
         g.addEdge(8,9,2);
-        System.out.println(g.toDotString());
-        ChinesePostman cp = new ChinesePostman(g);
 
-        UndirectedGraf copy = cp.copyGraf(cp.graf);
-        System.out.println(copy.toDotString());
+        ChinesePostman cp = new ChinesePostman(g);
+        Pair<UndirectedGraf,List<Edge>> res = cp.getChinesePostmanSolution(ChinesePostman.Strategy.GREEDY);
     }
 }
