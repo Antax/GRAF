@@ -1,13 +1,61 @@
 package main.pw3;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 import main.m1graf2021.*;
 
 public class testProgramPw3{
+
+    public static void toDotFile(String fileName,String s)throws FileNotFoundException {
+        PrintWriter writer = new PrintWriter(fileName);
+        writer.print(s);
+        writer.close();
+    }
+
+    public static String toDotString(UndirectedGraf previousGraf, UndirectedGraf resultGraf,String typeOfGraph, List<Edge> path, int lengthOfPath){
+        String res="graph {\n";
+        List<Node> allNodes=resultGraf.getAllNodes();
+        Collections.sort(allNodes);
+        for (Node n:allNodes) {
+            List<Edge>outEdges=resultGraf.getOutEdges(n);
+            Collections.sort(outEdges);
+            for (Edge e:outEdges) {
+                if(e.to().compareTo(e.from())>=0) {
+                    res+=n+" -- "+e.to();
+                    if(e.hasWeight() || !previousGraf.existsEdge(e)){
+                        res+="[";
+                        if(e.hasWeight()){
+                            res+="len="+e.weight()+",label="+e.weight();
+                        }
+                        if(!previousGraf.existsEdge(e)){
+                            if(e.hasWeight()){
+                                res+=",";
+                            }
+                            res+="color=red,fontcolor=red";
+                        }
+                        res+="]";
+                    }
+                    res+="\n";
+                }
+
+            }
+        }
+        res+="label=\"Type : "+typeOfGraph+"\n";
+        switch(typeOfGraph){
+            case("Eulerian"):
+            case("Semi-eulerian"):
+                res+="Eulerian-circuit : "+path.toString();
+                break;
+            case("Non-eulerian"):
+                res+="Chinese circuit : "+path.toString();
+        }
+        res+="\n";
+        res+="Total length : "+lengthOfPath+"\"\n";
+        res+='}';
+        return res;
+    }
+
     /**
      * Check if the imported graph is an Undirected Graph, parsing the first line of the .dot file
      *
@@ -140,15 +188,24 @@ public class testProgramPw3{
                     System.out.println("This graph is eulerian.\n");
 
                     System.out.println("The eulerian path is :\n");
-                    List eulerianpath = cp.getEulerianPath(cp.graf);
+                    List<Edge> eulerianpath = cp.getEulerianPath(cp.graf);
                     System.out.println(Arrays.toString(eulerianpath.toArray()));
+
+                    String stringUserChoice2=enterDotPathWriteMenu();
+                    //System.out.println(toDotString(cp.graf,cp.graf,"Eulerian",eulerianpath,cp.lengthOfPath(eulerianpath)));
+
+                    toDotFile(stringUserChoice2,toDotString(cp.graf,cp.graf,"Eulerian",eulerianpath,cp.lengthOfPath(eulerianpath)));
                 }
                 if (cp.isSemiEulerian()){
                     System.out.println("This graph is semi-eulerian.\n");
 
                     System.out.println("The eulerian path is :\n");
-                    List eulerianpath = cp.getEulerianPath(cp.graf);
+                    List<Edge> eulerianpath = cp.getEulerianPath(cp.graf);
                     System.out.println(Arrays.toString(eulerianpath.toArray()));
+
+                    String stringUserChoice2=enterDotPathWriteMenu();
+                    toDotFile(stringUserChoice2,toDotString(cp.graf,cp.graf,"Semi-eulerian",eulerianpath,cp.lengthOfPath(eulerianpath)));
+                    //System.out.println(toDotString(cp.graf,cp.graf,"Semi-eulerian",eulerianpath,cp.lengthOfPath(eulerianpath)));
                 }
                 if (cp.isNonEulerian()){
                     System.out.println("This graph is non-eulerian.\n");
@@ -158,33 +215,44 @@ public class testProgramPw3{
 
                         System.out.println("After adding extra edges, here is the eulerian path :\n");
 
-                        List list= cp.getChinesePostmanSolution(ChinesePostman.Strategy.OPTIMAL).getSecond();
+                        List<Edge> list= cp.getChinesePostmanSolution(ChinesePostman.Strategy.OPTIMAL).getSecond();
                         System.out.println(Arrays.toString(list.toArray()));
 
                         String stringUserChoice2=enterDotPathWriteMenu();
-                        cp.getChinesePostmanSolution(ChinesePostman.Strategy.OPTIMAL).getFirst().toDotFile(stringUserChoice2);
-                    }
 
-                    if (userChoice==2){
+                        Pair<UndirectedGraf, List<Edge>> solution = cp.getChinesePostmanSolution(ChinesePostman.Strategy.OPTIMAL);
+                        solution.getFirst().toDotFile(stringUserChoice2);
+
+                        toDotFile(stringUserChoice2,toDotString(cp.graf,solution.getFirst(),"Non-eulerian",solution.getSecond(),cp.lengthOfPath(solution.getSecond())));
+                        //System.out.println(toDotString(cp.graf,solution.getFirst(),"Non-eulerian",solution.getSecond(),cp.lengthOfPath(solution.getSecond())));
+                    }else if (userChoice==2){
 
                         System.out.println("After adding extra edges, here is the eulerian path :\n");
 
-                        List list= cp.getChinesePostmanSolution(ChinesePostman.Strategy.INORDER).getSecond();
+                        List<Edge> list= cp.getChinesePostmanSolution(ChinesePostman.Strategy.INORDER).getSecond();
                         System.out.println(Arrays.toString(list.toArray()));
 
                         String stringUserChoice2=enterDotPathWriteMenu();
-                        cp.getChinesePostmanSolution(ChinesePostman.Strategy.INORDER).getFirst().toDotFile(stringUserChoice2);
-                    }
 
-                    if (userChoice==3){
+                        Pair<UndirectedGraf, List<Edge>> solution = cp.getChinesePostmanSolution(ChinesePostman.Strategy.INORDER);
+                        solution.getFirst().toDotFile(stringUserChoice2);
+
+                        toDotFile(stringUserChoice2,toDotString(cp.graf,solution.getFirst(),"Non-eulerian",solution.getSecond(),cp.lengthOfPath(solution.getSecond())));
+                        //System.out.println(toDotString(cp.graf,solution.getFirst(),"Non-eulerian",solution.getSecond(),cp.lengthOfPath(solution.getSecond())));
+                    }else if (userChoice == 3) {
 
                         System.out.println("After adding extra edges, here is the eulerian path :\n");
 
-                        List list= cp.getChinesePostmanSolution(ChinesePostman.Strategy.GREEDY).getSecond();
+                        List<Edge> list = cp.getChinesePostmanSolution(ChinesePostman.Strategy.GREEDY).getSecond();
                         System.out.println(Arrays.toString(list.toArray()));
 
-                        String stringUserChoice2=enterDotPathWriteMenu();
-                        cp.getChinesePostmanSolution(ChinesePostman.Strategy.GREEDY).getFirst().toDotFile(stringUserChoice2);
+                        String stringUserChoice2 = enterDotPathWriteMenu();
+
+                        Pair<UndirectedGraf, List<Edge>> solution = cp.getChinesePostmanSolution(ChinesePostman.Strategy.GREEDY);
+                        solution.getFirst().toDotFile(stringUserChoice2);
+
+                        toDotFile(stringUserChoice2,toDotString(cp.graf,solution.getFirst(),"Non-eulerian",solution.getSecond(),cp.lengthOfPath(solution.getSecond())));
+                        //System.out.println(toDotString(cp.graf,solution.getFirst(),"Non-eulerian",solution.getSecond(),cp.lengthOfPath(solution.getSecond())));
                     }
                 }
             }
