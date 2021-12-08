@@ -8,6 +8,10 @@ import java.io.IOException;
 import java.util.*;
 
 public class ChinesePostman {
+    public enum Strategy{
+        INORDER, GREEDY
+    }
+
     private UndirectedGraf graf;
 
     public ChinesePostman(UndirectedGraf graf){
@@ -254,7 +258,7 @@ public class ChinesePostman {
         return floydWarshallResult.get(new Pair<>(new Node(first),new Node(second))).getFirst();
     }
 
-    public List<Pair<Node,Node>> getPairwiseMatchingRandom(){
+    public List<Pair<Node,Node>> getPairwiseMatchingInOrder(){
         List<Pair<Node,Node>> res = new ArrayList<Pair<Node,Node>>();
         List<Node> oddDegreeNodes = getAllOddDegrees();
         for (int i=0; i<oddDegreeNodes.size(); i+=2){
@@ -263,7 +267,7 @@ public class ChinesePostman {
         return res;
     }
 
-    public List<Pair<Node,Node>> getPairwiseMatchingNaive(Map<Pair<Node,Node>, Pair<Integer, Node>> floydWarshallResult){
+    public List<Pair<Node,Node>> getPairwiseMatchingGreedy(Map<Pair<Node,Node>, Pair<Integer, Node>> floydWarshallResult){
         List<Pair<Node,Node>> res = new ArrayList<Pair<Node,Node>>();
         //todo
         return res;
@@ -276,10 +280,20 @@ public class ChinesePostman {
             for (Edge toAdd : edgesToAdd){
                 Edge e = new Edge(toAdd.from(), toAdd.to());
                 e.setWeight(graf.getEdge(e).weight());
-                System.out.println("ADDDING : "+ e);
                 g.addEdge(e);
             }
         }
         return g;
+    }
+
+    public UndirectedGraf getChinesePostmanSolution(Strategy strategy) {
+        List<Pair<Node,Node>> pairwiseMatching = new ArrayList<>();
+        switch (strategy){
+            case GREEDY:
+                break;
+            case INORDER:
+                pairwiseMatching = getPairwiseMatchingInOrder();
+        }
+        return getEquivalentGraf(pairwiseMatching, floydWarshall());
     }
 }

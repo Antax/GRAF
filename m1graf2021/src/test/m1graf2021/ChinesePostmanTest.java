@@ -81,7 +81,7 @@ public class ChinesePostmanTest {
     }
 
     @Test
-    public void pairwiseMatchingRandom(){
+    public void pairwiseMatchingInOrder(){
         UndirectedGraf g = new UndirectedGraf();
         g.addEdge(1,2);
         g.setEdgeWeight(1,2,1);
@@ -116,9 +116,6 @@ public class ChinesePostmanTest {
         g.setEdgeWeight(8,9,2);
 
         ChinesePostman cp = new ChinesePostman(g);
-        List<Pair<Node,Node>> pairwiseMatching = cp.getPairwiseMatchingRandom();
-
-        UndirectedGraf resultAfterPairwiseMatching = cp.getEquivalentGraf(pairwiseMatching, cp.floydWarshall());
-        System.out.println(resultAfterPairwiseMatching.toDotString());
+        System.out.println(cp.getChinesePostmanSolution(ChinesePostman.Strategy.INORDER).toDotString());
     }
 }
