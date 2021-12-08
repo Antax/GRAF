@@ -186,7 +186,6 @@ public class ChinesePostman {
         }
         for(int i=1; i<highestnode;++i){
             for(int j=1; j<highestnode;++j){
-                System.out.println(i+" "+j+" length : "+M[i][j]+" previousStep : "+Prec[i][j]);
                 res.put(new Pair(i,j), new Pair(M[i][j],Prec[i][j]));
             }
         }
@@ -204,10 +203,8 @@ public class ChinesePostman {
             }
         }
 
-        System.out.println("SUUUUUUU");
         for(int i=1; i<highestnode;++i){
             for(int j=1; j<highestnode;++j){
-                System.out.println(i+" "+j+" length : "+M[i][j]+" nextStep : "+Prec[i][j]);
                 res.put(new Pair(i,j), new Pair(M[i][j],Prec[i][j]));
             }
         }
@@ -215,24 +212,48 @@ public class ChinesePostman {
         return res;
     }
 
-    public List<Edge> shortestPathBetween2Nodes(Map<Pair<Node,Node>, Pair<Integer, Node>> floydWarshallResult){
-        List<Edge> res = new ArrayList<Edge>();
-        //todo
+    public List<Node> getAllOddDegrees(){
+        List<Node> res = new ArrayList<>();
+        for (Node n: graf.getAllNodes()){
+            if(isOddDegree(n)){
+                res.add(n);
+            }
+        }
         return res;
+    }
+
+    public List<Edge> shortestPathBetween2Nodes(Map<Pair<Node,Node>, Pair<Integer, Node>> floydWarshallResult, Node first, Node second){
+        List<Edge> res = new ArrayList<Edge>();
+        Node current = second;
+        Node previous = floydWarshallResult.get(new Pair<>(first,current)).getSecond();
+
+        while(!current.equals(first)){
+            res.add(graf.getEdge(new Edge(previous,current)));
+            current = previous;
+            previous = floydWarshallResult.get(new Pair<>(first,current)).getSecond();
+        }
+        Collections.reverse(res);
+        return res;
+    }
+
+    public List<Edge> shortestPathBetween2Nodes(Map<Pair<Node,Node>, Pair<Integer, Node>> floydWarshallResult, int first, int second){
+        return shortestPathBetween2Nodes(floydWarshallResult, new Node(first), new Node(second));
     }
 
     public int lengthOfShortestPathBetween2Nodes(Map<Pair<Node,Node>, Pair<Integer, Node>> floydWarshallResult, Node first, Node second){
         return floydWarshallResult.get(new Pair<>(first,second)).getFirst();
     }
 
-    public Node lengthOfShortestPathBetween2Nodes(Map<Pair<Node,Node>, Pair<Integer, Node>> floydWarshallResult, int first, int second){
-        //return floydWarshallResult.get(new Pair<>(new Node(first),new Node(second))).getFirst();
-        return floydWarshallResult.get(new Pair<>(new Node(first),new Node(second))).getSecond();
+    public int lengthOfShortestPathBetween2Nodes(Map<Pair<Node,Node>, Pair<Integer, Node>> floydWarshallResult, int first, int second){
+        return floydWarshallResult.get(new Pair<>(new Node(first),new Node(second))).getFirst();
     }
 
-    public List<Pair<Node,Node>> getPairwiseMatchingRandom(Map<Pair<Node,Node>, Pair<Integer, Node>> floydWarshallResult){
+    public List<Pair<Node,Node>> getPairwiseMatchingRandom(){
         List<Pair<Node,Node>> res = new ArrayList<Pair<Node,Node>>();
-        //todo
+        List<Node> oddDegreeNodes = getAllOddDegrees();
+        for (int i=0; i<oddDegreeNodes.size(); i+=2){
+            res.add(new Pair<>(oddDegreeNodes.get(i),oddDegreeNodes.get(i+1)));
+        }
         return res;
     }
 

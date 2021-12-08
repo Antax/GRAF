@@ -76,5 +76,46 @@ public class ChinesePostmanTest {
 
         ChinesePostman cp = new ChinesePostman(g);
         Map<Pair<Node,Node>, Pair<Integer, Node>> floydWarshallResult = cp.floydWarshall();
+
+        System.out.println(cp.shortestPathBetween2Nodes(floydWarshallResult,3,1));
+    }
+
+    @Test
+    public void pairwiseMatchingRandom(){
+        UndirectedGraf g = new UndirectedGraf();
+        g.addEdge(1,2);
+        g.setEdgeWeight(1,2,1);
+        g.addEdge(1,4);
+        g.setEdgeWeight(1,4,2);
+
+        g.addEdge(2,3);
+        g.setEdgeWeight(2,3,3);
+        g.addEdge(2,5);
+        g.setEdgeWeight(2,5,8);
+
+        g.addEdge(3,6);
+        g.setEdgeWeight(3,6,2);
+
+        g.addEdge(4,5);
+        g.setEdgeWeight(4,5,6);
+        g.addEdge(4,7);
+        g.setEdgeWeight(4,7,4);
+
+        g.addEdge(5,6);
+        g.setEdgeWeight(5,6,5);
+        g.addEdge(5,8);
+        g.setEdgeWeight(5,8,6);
+
+        g.addEdge(6,9);
+        g.setEdgeWeight(6,9,2);
+
+        g.addEdge(7,8);
+        g.setEdgeWeight(7,8,2);
+
+        g.addEdge(8,9);
+        g.setEdgeWeight(8,2,2);
+
+        ChinesePostman cp = new ChinesePostman(g);
+        List<Pair<Node,Node>> pairwiseMatching = cp.getPairwiseMatchingRandom();
     }
 }
